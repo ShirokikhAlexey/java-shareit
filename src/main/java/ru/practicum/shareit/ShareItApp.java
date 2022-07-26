@@ -7,8 +7,8 @@ import ru.practicum.shareit.db.memory.UserStorageMemory;
 
 @SpringBootApplication
 public class ShareItApp {
-    public static ItemStorageMemory itemStorage = new ItemStorageMemory();
-    public static UserStorageMemory userStorage = new UserStorageMemory();
+    public static final ItemStorageMemory itemStorage = new ItemStorageMemory();
+    public static final UserStorageMemory userStorage = new UserStorageMemory();
 
     public static void main(String[] args) {
         SpringApplication.run(ShareItApp.class, args);
