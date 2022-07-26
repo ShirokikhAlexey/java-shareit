@@ -20,14 +20,14 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ItemDto create(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Integer userId) {
         ItemDto newItem = itemService.create(item, userId);
         log.info("Добавлена новая вещь {}", newItem.toString());
         return newItem;
     }
 
-    @PatchMapping(value = "/{itemId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{itemId}")
     public ItemDto update(@PathVariable int itemId, @RequestBody ItemDto item,
                        @RequestHeader("X-Sharer-User-Id") Integer userId) {
         try {

@@ -18,7 +18,8 @@ public class ItemStorageMemory implements ItemStorageBase {
 
     @Override
     public Item create(Item item) {
-        item.setId(counter + 1);
+        ++counter;
+        item.setId(counter);
         itemsList.put(item.getId(), item);
         return item;
     }

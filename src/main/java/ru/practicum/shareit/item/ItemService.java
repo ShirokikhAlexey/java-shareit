@@ -16,7 +16,7 @@ public interface ItemService {
 
     public ItemDto get(Integer itemId) throws NotFoundException;
 
-    public List<ItemDto> getAll(Integer userId);
+    public List<ItemDto> getAll(Integer itemId);
 
     public List<ItemDto> search(String text);
 

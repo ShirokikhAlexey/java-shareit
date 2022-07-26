@@ -47,13 +47,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAll(Integer userId) {
+    public List<ItemDto> getAll(Integer itemId) {
         List<ItemDto> result = new ArrayList<>();
-        for(Item item : itemStorage.getUserItems(userId)) {
+        for(Item item : itemStorage.getUserItems(itemId)) {
             result.add(ItemMapper.toDto(item));
         }
         return result;
-
     }
 
     @Override

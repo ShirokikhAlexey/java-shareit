@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.User;
 
 public class ItemMapper {
     public static ItemDto toDto(Item item) {
-        return new ItemDto(item.getName(), item.getDescription(), item.getStatus());
+        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getStatus());
     }
 
     public static Item fromDto(User user, ItemDto itemDto) {
@@ -15,9 +15,15 @@ public class ItemMapper {
     }
 
     public static Item updateFromDto(Item item, ItemDto itemDto) {
-        item.setName(itemDto.getName());
-        item.setDescription(itemDto.getDescription());
-        item.setStatus(itemDto.getStatus());
+        if (itemDto.getName() != null) {
+            item.setName(itemDto.getName());
+        }
+        if (itemDto.getDescription() != null) {
+            item.setDescription(itemDto.getDescription());
+        }
+        if (itemDto.getStatus() != null) {
+            item.setStatus(itemDto.getStatus());
+        }
         return item;
     }
 }
