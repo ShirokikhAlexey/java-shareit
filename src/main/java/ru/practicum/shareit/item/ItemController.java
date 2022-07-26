@@ -11,6 +11,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
+import javax.validation.ValidationException;
 import java.util.List;
 
 @Slf4j
@@ -22,9 +23,16 @@ public class ItemController {
 
     @PostMapping()
     public ItemDto create(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        ItemDto newItem = itemService.create(item, userId);
-        log.info("Добавлена новая вещь {}", newItem.toString());
-        return newItem;
+        try {
+            ItemDto newItem = itemService.create(item, userId);
+            log.info("Добавлена новая вещь {}", newItem.toString());
+            return newItem;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PatchMapping(value = "/{itemId}")
@@ -57,7 +65,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(String text){
+    public List<ItemDto> search(@RequestParam String text){
         return itemService.search(text);
     }
 }

@@ -10,7 +10,7 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemService {
-    public ItemDto create(ItemDto item, Integer userId);
+    public ItemDto create(ItemDto item, Integer userId) throws NotFoundException;
 
     public ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException, InvalidUserException;
 

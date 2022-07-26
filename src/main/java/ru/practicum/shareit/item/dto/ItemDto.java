@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import ru.practicum.shareit.item.util.Status;
 
 @Data
 @RequiredArgsConstructor
@@ -19,14 +18,14 @@ public class ItemDto {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("status")
-    private Status status;
+    @JsonProperty("available")
+    private Boolean available;
 
 
-    public ItemDto(Integer id, String name, String description, Status status) {
+    public ItemDto(Integer id, String name, String description, Boolean available) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.status = status;
+        this.available = available;
     }
 }

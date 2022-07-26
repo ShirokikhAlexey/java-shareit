@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.item.util.Status;
 import ru.practicum.shareit.user.User;
 
 import java.util.List;
@@ -21,6 +20,6 @@ public class Item {
     @NonNull
     private String description;
     @NonNull
-    private Status status;
+    private Boolean available;
     private List<Booking> booking;
 }
