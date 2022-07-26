@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 public class Item {
-    @NonNull
     private Integer id;
     @NonNull
     private User owner;
@@ -23,6 +22,5 @@ public class Item {
     private String description;
     @NonNull
     private Status status;
-    @NonNull
     private List<Booking> booking;
 }
