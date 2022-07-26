@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.NonNull;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 

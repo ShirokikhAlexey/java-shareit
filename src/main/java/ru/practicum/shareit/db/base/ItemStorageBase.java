@@ -5,15 +5,15 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemStorageBase {
-    public Item get(Integer id);
+    Item get(Integer id);
 
-    public Item create(Item item);
+    Item create(Item item);
 
-    public Item update(Item item);
+    Item update(Item item);
 
-    public void delete(Integer id);
+    void delete(Integer id);
 
-    public List<Item> getUserItems(Integer userId);
+    List<Item> getUserItems(Integer userId);
 
-    public List<Item> search(String text);
+    List<Item> search(String text);
 }

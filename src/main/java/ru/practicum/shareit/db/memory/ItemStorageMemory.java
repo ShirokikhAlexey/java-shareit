@@ -6,7 +6,6 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 public class ItemStorageMemory implements ItemStorageBase {
     HashMap<Integer, Item> itemsList = new HashMap<>();
@@ -39,7 +38,7 @@ public class ItemStorageMemory implements ItemStorageBase {
     @Override
     public List<Item> getUserItems(Integer userId) {
         List<Item> userItems = new ArrayList<>();
-        for(Item item : itemsList.values()){
+        for (Item item : itemsList.values()) {
             if (item.getOwner().getId().equals(userId)) {
                 userItems.add(item);
             }
@@ -50,13 +49,13 @@ public class ItemStorageMemory implements ItemStorageBase {
     @Override
     public List<Item> search(String text) {
         List<Item> userItems = new ArrayList<>();
-        if(text.isBlank()){
+        if (text.isBlank()) {
             return userItems;
         }
-        for(Item item : itemsList.values()){
+        for (Item item : itemsList.values()) {
             if ((item.getName().toLowerCase().contains(text.toLowerCase()) ||
                     item.getDescription().toLowerCase().contains(text.toLowerCase()))
-            && item.getAvailable()) {
+                    && item.getAvailable()) {
                 userItems.add(item);
             }
         }

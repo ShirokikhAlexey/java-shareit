@@ -6,15 +6,15 @@ import java.util.List;
 
 
 public interface UserStorageBase {
-    public User get(Integer id);
+    User get(Integer id);
 
-    public User create(User user);
+    User create(User user);
 
-    public User update(User user);
+    User update(User user);
 
-    public void delete(Integer id);
+    void delete(Integer id);
 
-    public User findByEmail(String email);
+    User findByEmail(String email);
 
-    public List<User> getAll();
+    List<User> getAll();
 }

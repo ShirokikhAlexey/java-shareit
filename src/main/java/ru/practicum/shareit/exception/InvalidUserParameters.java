@@ -1,4 +1,4 @@
 package ru.practicum.shareit.exception;
 
-public class InvalidUserParameters extends Exception{
+public class InvalidUserParameters extends Exception {
 }

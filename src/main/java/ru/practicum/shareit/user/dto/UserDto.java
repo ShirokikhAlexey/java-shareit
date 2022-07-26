@@ -3,11 +3,8 @@ package ru.practicum.shareit.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

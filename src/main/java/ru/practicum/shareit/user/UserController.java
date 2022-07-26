@@ -3,14 +3,11 @@ package ru.practicum.shareit.user;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.InvalidUserParameters;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.ItemService;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.ValidationException;

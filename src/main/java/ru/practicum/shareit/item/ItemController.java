@@ -3,13 +3,11 @@ package ru.practicum.shareit.item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -37,7 +35,7 @@ public class ItemController {
 
     @PatchMapping(value = "/{itemId}")
     public ItemDto update(@PathVariable int itemId, @RequestBody ItemDto item,
-                       @RequestHeader("X-Sharer-User-Id") Integer userId) {
+                          @RequestHeader("X-Sharer-User-Id") Integer userId) {
         try {
             return itemService.update(itemId, item, userId);
         } catch (NotFoundException e) {
@@ -60,12 +58,12 @@ public class ItemController {
     }
 
     @GetMapping()
-    public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Integer userId){
+    public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Integer userId) {
         return itemService.getAll(userId);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam String text){
+    public List<ItemDto> search(@RequestParam String text) {
         return itemService.search(text);
     }
 }

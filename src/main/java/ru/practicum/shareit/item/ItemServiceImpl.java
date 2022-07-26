@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -46,7 +45,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto get(Integer itemId) throws NotFoundException {
         Item item = itemStorage.get(itemId);
-        if(item == null){
+        if (item == null) {
             throw new NotFoundException();
         }
         return ItemMapper.toDto(item);
@@ -55,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getAll(Integer itemId) {
         List<ItemDto> result = new ArrayList<>();
-        for(Item item : itemStorage.getUserItems(itemId)) {
+        for (Item item : itemStorage.getUserItems(itemId)) {
             result.add(ItemMapper.toDto(item));
         }
         return result;
@@ -64,7 +63,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> search(String text) {
         List<ItemDto> result = new ArrayList<>();
-        for(Item item : itemStorage.search(text)) {
+        for (Item item : itemStorage.search(text)) {
             result.add(ItemMapper.toDto(item));
         }
         return result;
@@ -77,7 +76,7 @@ public class ItemServiceImpl implements ItemService {
         if (item.getName() == null || item.getName().isBlank()) {
             throw new ValidationException();
         }
-        if (item.getDescription() == null ||item.getDescription().isBlank()) {
+        if (item.getDescription() == null || item.getDescription().isBlank()) {
             throw new ValidationException();
         }
     }
