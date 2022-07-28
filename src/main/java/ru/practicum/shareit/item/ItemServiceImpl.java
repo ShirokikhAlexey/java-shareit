@@ -1,6 +1,9 @@
 package ru.practicum.shareit.item;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.db.memory.ItemStorageMemory;
+import ru.practicum.shareit.db.memory.UserStorageMemory;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -12,11 +15,13 @@ import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.practicum.shareit.ShareItApp.itemStorage;
-import static ru.practicum.shareit.ShareItApp.userStorage;
 
 @Service
 public class ItemServiceImpl implements ItemService {
+    @Autowired
+    UserStorageMemory userStorage;
+    @Autowired
+    ItemStorageMemory itemStorage;
 
     @Override
     public ItemDto create(ItemDto item, Integer userId) throws NotFoundException {

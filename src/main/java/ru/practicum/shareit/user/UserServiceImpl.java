@@ -1,6 +1,9 @@
 package ru.practicum.shareit.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.db.memory.ItemStorageMemory;
+import ru.practicum.shareit.db.memory.UserStorageMemory;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.InvalidUserParameters;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -12,11 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static ru.practicum.shareit.ShareItApp.userStorage;
-
 
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    UserStorageMemory userStorage;
+
+
     @Override
     public UserDto create(UserDto user) throws InvalidUserException, InvalidUserParameters {
         if (user.getEmail() == null || user.getName() == null) {
