@@ -3,8 +3,8 @@ package ru.practicum.shareit.item.model;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
