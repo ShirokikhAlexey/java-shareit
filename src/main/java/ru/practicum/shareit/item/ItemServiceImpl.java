@@ -2,6 +2,8 @@ package ru.practicum.shareit.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.db.db.ItemRepository;
+import ru.practicum.shareit.db.db.UserRepository;
 import ru.practicum.shareit.db.memory.ItemStorageMemory;
 import ru.practicum.shareit.db.memory.UserStorageMemory;
 import ru.practicum.shareit.exception.InvalidUserException;
@@ -14,52 +16,57 @@ import ru.practicum.shareit.user.model.User;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class ItemServiceImpl implements ItemService {
-    @Autowired
-    UserStorageMemory userStorage;
-    @Autowired
-    ItemStorageMemory itemStorage;
+    private final UserRepository userRepository;
+
+    private final ItemRepository itemRepository;
+
+    public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository) {
+        this.userRepository = userRepository;
+        this.itemRepository = itemRepository;
+    }
 
     @Override
     public ItemDto create(ItemDto item, Integer userId) throws NotFoundException {
-        User user = userStorage.get(userId);
-        if (user == null) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
             throw new NotFoundException();
         }
         validate(item);
-        return ItemMapper.toDto(itemStorage.create(ItemMapper.fromDto(user, item)));
+        return ItemMapper.toDto(itemRepository.save(ItemMapper.fromDto(user.get(), item)));
     }
 
     @Override
     public ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException, InvalidUserException {
-        Item item = itemStorage.get(itemId);
-        if (item == null) {
+        Optional<Item> item = itemRepository.findById(itemId);
+        if (item.isEmpty()) {
             throw new NotFoundException();
         }
-        if (!item.getOwner().getId().equals(userId)) {
+        if (!item.get().getOwner().getId().equals(userId)) {
             throw new NotFoundException();
         }
-        Item updatedItem = ItemMapper.updateFromDto(item, itemDto);
-        itemStorage.update(updatedItem);
+        Item updatedItem = ItemMapper.updateFromDto(item.get(), itemDto);
+        itemRepository.save(updatedItem);
         return ItemMapper.toDto(updatedItem);
     }
 
     @Override
     public ItemDto get(Integer itemId) throws NotFoundException {
-        Item item = itemStorage.get(itemId);
-        if (item == null) {
+        Optional<Item> item = itemRepository.findById(itemId);
+        if (item.isEmpty()) {
             throw new NotFoundException();
         }
-        return ItemMapper.toDto(item);
+        return ItemMapper.toDto(item.get());
     }
 
     @Override
-    public List<ItemDto> getAll(Integer itemId) {
+    public List<ItemDto> getAll(Integer userId) {
         List<ItemDto> result = new ArrayList<>();
-        for (Item item : itemStorage.getUserItems(itemId)) {
+        for (Item item : itemRepository.findByOwner_Id(userId)) {
             result.add(ItemMapper.toDto(item));
         }
         return result;
@@ -68,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> search(String text) {
         List<ItemDto> result = new ArrayList<>();
-        for (Item item : itemStorage.search(text)) {
+        for (Item item : itemRepository.search(text)) {
             result.add(ItemMapper.toDto(item));
         }
         return result;
