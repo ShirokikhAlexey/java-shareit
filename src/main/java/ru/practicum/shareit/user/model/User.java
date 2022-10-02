@@ -26,7 +26,7 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToOne
+    @OneToMany
     @JoinTable(name="items", joinColumns=@JoinColumn(name="id"))
     private List<Item> items = new ArrayList<>();
 }

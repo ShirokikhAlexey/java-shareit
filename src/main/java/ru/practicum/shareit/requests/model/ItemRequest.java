@@ -25,9 +25,11 @@ public class ItemRequest {
     private User author;
 
     @NonNull
-    private List<Item> suggestions;
+    @ManyToOne
+    @JoinTable(name="items", joinColumns=@JoinColumn(name="id"))
+    private Item suggestion;
 
     @NonNull
     @Enumerated(EnumType.STRING)
-    private Status closed;
+    private Status status;
 }
