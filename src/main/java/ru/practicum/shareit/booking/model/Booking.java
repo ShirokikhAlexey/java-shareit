@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.booking.util.Status;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -37,8 +38,8 @@ public class Booking {
     private LocalDateTime to;
 
     @NonNull
-    @Column(name = "finished", nullable = false)
-    private Boolean finished = false;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @NonNull
     @Column(name = "review", nullable = false)
