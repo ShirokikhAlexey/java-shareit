@@ -11,4 +11,8 @@ public interface BookingService {
     BookingDto update(Integer bookingId, BookingDto bookingDto) throws NotFoundException, InvalidUserException;
 
     BookingDto get(Integer bookingId) throws NotFoundException;
+
+    BookingDto changeStatus(int bookingId, boolean newStatus, int userId) throws NotFoundException, InvalidUserException;
+
+    BookingDto get(Integer bookingId, Integer userId) throws NotFoundException, InvalidUserException;
 }
