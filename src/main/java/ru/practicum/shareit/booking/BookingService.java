@@ -5,6 +5,8 @@ import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import java.util.List;
+
 public interface BookingService {
     BookingDto create(BookingDto bookingDto) throws NotFoundException;
 
@@ -15,4 +17,8 @@ public interface BookingService {
     BookingDto changeStatus(int bookingId, boolean newStatus, int userId) throws NotFoundException, InvalidUserException;
 
     BookingDto get(Integer bookingId, Integer userId) throws NotFoundException, InvalidUserException;
+
+    List<BookingDto> getStatusList(Integer userId, String state);
+
+    List<BookingDto> getUserItemsBookings(Integer userId, String state);
 }

@@ -13,6 +13,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -102,5 +103,15 @@ public class BookingServiceImpl implements BookingService {
             throw new InvalidUserException();
         }
         return BookingMapper.toDto(booking.get());
+    }
+
+    @Override
+    public List<BookingDto> getStatusList(Integer userId, String state) {
+        return bookingRepository.getByStatus(userId, state);
+    }
+
+    @Override
+    public List<BookingDto> getUserItemsBookings(Integer userId, String state) {
+        return bookingRepository.getUserItemsBookings(userId, state);
     }
 }

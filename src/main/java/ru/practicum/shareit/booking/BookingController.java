@@ -12,6 +12,7 @@ import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import javax.validation.ValidationException;
+import java.util.List;
 
 
 @Slf4j
@@ -60,4 +61,16 @@ public class BookingController {
             throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
+
+    @GetMapping
+    public List<BookingDto> getState(@RequestParam String state, @RequestHeader("X-Sharer-User-Id") Integer userId) {
+        return bookingService.getStatusList(userId, state);
+    }
+
+    @GetMapping(value = "/owner")
+    public List<BookingDto> getUserItemsBookings(@RequestParam String state,
+                                           @RequestHeader("X-Sharer-User-Id") Integer userId) {
+        return bookingService.getUserItemsBookings(userId, state);
+    }
+
 }
