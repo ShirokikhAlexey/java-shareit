@@ -2,7 +2,9 @@ package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 
 import java.util.List;
 
@@ -16,5 +18,9 @@ public interface ItemService {
     List<ItemDto> getAll(Integer itemId);
 
     List<ItemDto> search(String text);
+
+    void addComment(CommentDto comment) throws NotFoundException;
+
+    List<CommentDto> getItemComments(Integer itemId);
 
 }

@@ -4,14 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.db.db.BookingRepository;
+import ru.practicum.shareit.db.db.CommentRepository;
 import ru.practicum.shareit.db.db.ItemRepository;
 import ru.practicum.shareit.db.db.UserRepository;
 import ru.practicum.shareit.db.memory.ItemStorageMemory;
 import ru.practicum.shareit.db.memory.UserStorageMemory;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -30,11 +33,14 @@ public class ItemServiceImpl implements ItemService {
 
     private final BookingRepository bookingRepository;
 
+    private final CommentRepository commentRepository;
+
     public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository,
-                           BookingRepository bookingRepository) {
+                           BookingRepository bookingRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.bookingRepository = bookingRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -67,7 +73,9 @@ public class ItemServiceImpl implements ItemService {
         if (item.isEmpty()) {
             throw new NotFoundException();
         }
-        return ItemMapper.toDto(item.get());
+        ItemDto itemDto = ItemMapper.toDto(item.get());
+        itemDto.setComments(getItemComments(itemId));
+        return itemDto;
     }
 
     @Override
@@ -81,6 +89,7 @@ public class ItemServiceImpl implements ItemService {
             itemDto.setLatestBooking(latestBookingTime);
             itemDto.setNearestBooking(nearestBookingTime);
 
+            itemDto.setComments(getItemComments(item.getId()));
             result.add(itemDto);
         }
         return result;
@@ -93,6 +102,37 @@ public class ItemServiceImpl implements ItemService {
             result.add(ItemMapper.toDto(item));
         }
         return result;
+    }
+
+    @Override
+    public void addComment(CommentDto commentDto) throws NotFoundException {
+        User user;
+        Item item;
+        if (userRepository.findById(commentDto.getUser_id()).isPresent()){
+            user = userRepository.findById(commentDto.getUser_id()).get();
+        } else {
+            throw new NotFoundException();
+        }
+        if (itemRepository.findById(commentDto.getItem_id()).isPresent()){
+            item = itemRepository.findById(commentDto.getItem_id()).get();
+        } else {
+            throw new NotFoundException();
+        }
+
+        Comment comment = new Comment(user, item, commentDto.getReview());
+
+        commentRepository.save(comment);
+    }
+
+    @Override
+    public List<CommentDto> getItemComments(Integer itemId) {
+        List<Comment> comments = commentRepository.findByItem_Id(itemId);
+        List<CommentDto> commentDtos = new ArrayList<>();
+        for(Comment comment : comments) {
+            commentDtos.add(new CommentDto( comment.getAuthor().getId(), comment.getItem().getId(),
+                    comment.getReview()));
+        }
+        return commentDtos;
     }
 
     private void validate(ItemDto item) {

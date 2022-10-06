@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -25,6 +26,8 @@ public class ItemDto {
     private LocalDateTime latestBooking;
 
     private LocalDateTime nearestBooking;
+
+    private List<CommentDto> comments;
 
 
     public ItemDto(Integer id, String name, String description, Boolean available, LocalDateTime latestBooking,
