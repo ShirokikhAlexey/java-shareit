@@ -2,6 +2,8 @@ package ru.practicum.shareit.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.db.db.BookingRepository;
 import ru.practicum.shareit.db.db.ItemRepository;
 import ru.practicum.shareit.db.db.UserRepository;
 import ru.practicum.shareit.db.memory.ItemStorageMemory;
@@ -14,6 +16,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +28,13 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
 
-    public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository) {
+    private final BookingRepository bookingRepository;
+
+    public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository,
+                           BookingRepository bookingRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override
@@ -67,7 +74,14 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getAll(Integer userId) {
         List<ItemDto> result = new ArrayList<>();
         for (Item item : itemRepository.findByOwner_Id(userId)) {
-            result.add(ItemMapper.toDto(item));
+            LocalDateTime latestBookingTime = bookingRepository.getItemLatestBooking(item.getId());
+            LocalDateTime nearestBookingTime = bookingRepository.getItemNearestBooking(item.getId());
+            ItemDto itemDto = ItemMapper.toDto(item);
+
+            itemDto.setLatestBooking(latestBookingTime);
+            itemDto.setNearestBooking(nearestBookingTime);
+
+            result.add(itemDto);
         }
         return result;
     }

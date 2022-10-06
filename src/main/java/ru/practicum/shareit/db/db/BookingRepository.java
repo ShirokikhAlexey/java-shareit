@@ -6,6 +6,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
@@ -24,4 +25,20 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "and i.owner_id = ?1 " +
             "order by b.from_timestamp desc")
     List<BookingDto> getUserItemsBookings(Integer userId, String state);
+
+    @Query("select b.to_timestamp " +
+            "from Booking as b " +
+            "where b.item_id = ?1 " +
+            "and b.status = 'PAST' " +
+            "order by b.from_timestamp desc " +
+            "limit 1")
+    LocalDateTime getItemLatestBooking(Integer itemId);
+
+    @Query("select b.to_timestamp " +
+            "from Booking as b " +
+            "where b.item_id = ?1 " +
+            "and b.status = 'FUTURE' " +
+            "order by b.from_timestamp asc " +
+            "limit 1")
+    LocalDateTime getItemNearestBooking(Integer itemId);
 }
