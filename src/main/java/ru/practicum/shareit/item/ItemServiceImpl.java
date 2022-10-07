@@ -104,13 +104,13 @@ public class ItemServiceImpl implements ItemService {
     public void addComment(CommentDto commentDto) throws NotFoundException {
         User user;
         Item item;
-        if (userRepository.findById(commentDto.getUser_id()).isPresent()) {
-            user = userRepository.findById(commentDto.getUser_id()).get();
+        if (userRepository.findById(commentDto.getUserId()).isPresent()) {
+            user = userRepository.findById(commentDto.getUserId()).get();
         } else {
             throw new NotFoundException();
         }
-        if (itemRepository.findById(commentDto.getItem_id()).isPresent()) {
-            item = itemRepository.findById(commentDto.getItem_id()).get();
+        if (itemRepository.findById(commentDto.getItemId()).isPresent()) {
+            item = itemRepository.findById(commentDto.getItemId()).get();
         } else {
             throw new NotFoundException();
         }

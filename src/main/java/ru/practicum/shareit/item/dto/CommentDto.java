@@ -8,17 +8,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentDto {
     @JsonProperty("user_id")
-    private Integer user_id;
+    private Integer userId;
 
     @JsonProperty("item_id")
-    private Integer item_id;
+    private Integer itemId;
 
     @JsonProperty("review")
     private String review;
 
-    public CommentDto(Integer user_id, Integer item_id, String review) {
-        this.user_id = user_id;
-        this.item_id = item_id;
+    public CommentDto(Integer userId, Integer itemId, String review) {
+        this.userId = userId;
+        this.itemId = itemId;
         this.review = review;
     }
 }

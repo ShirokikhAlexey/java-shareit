@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class BookingDto {
     @JsonProperty("user_id")
-    private Integer user_id;
+    private Integer userId;
 
     @JsonProperty("item_id")
-    private Integer item_id;
+    private Integer itemId;
 
     @JsonProperty("from")
     private LocalDateTime from;
@@ -29,10 +29,10 @@ public class BookingDto {
     @JsonProperty("review")
     private String review;
 
-    public BookingDto(Integer user_id, Integer item_id, LocalDateTime from, LocalDateTime to, Status status,
+    public BookingDto(Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
                       String review) {
-        this.user_id = user_id;
-        this.item_id = item_id;
+        this.userId = userId;
+        this.itemId = itemId;
         this.from = from;
         this.to = to;
         this.status = status;

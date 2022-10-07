@@ -33,5 +33,7 @@ public class User {
     @OneToMany(mappedBy = "bookedBy")
     private List<Booking> bookings = new ArrayList<>();
 
-    public User(){}
+    public User() {
+
+    }
 }

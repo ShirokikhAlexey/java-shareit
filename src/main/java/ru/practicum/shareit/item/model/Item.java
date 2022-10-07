@@ -40,5 +40,7 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<Booking> bookings;
 
-    public Item(){}
+    public Item() {
+
+    }
 }
