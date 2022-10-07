@@ -40,6 +40,9 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<Booking> bookings;
 
+    @OneToMany(mappedBy = "item")
+    private List<Comment> comments;
+
     public Item() {
 
     }

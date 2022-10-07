@@ -94,6 +94,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> search(String text) {
         List<ItemDto> result = new ArrayList<>();
+        if (text.isEmpty()) {
+            return result;
+        }
         for (Item item : itemRepository.search(text)) {
             result.add(ItemMapper.toDto(item));
         }

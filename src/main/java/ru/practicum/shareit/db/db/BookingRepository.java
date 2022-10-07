@@ -27,7 +27,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "order by b.from_timestamp desc", nativeQuery = true)
     List<BookingDto> getUserItemsBookings(Integer userId, String state);
 
-    @Query(value = "select LocalDateTime.parse(b.to_timestamp) " +
+    @Query(value = "select b.to_timestamp " +
             "from Booking as b " +
             "where b.item_id = ?1 " +
             "and b.status = 'PAST' " +
@@ -35,7 +35,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "limit 1", nativeQuery = true)
     LocalDateTime getItemLatestBooking(Integer itemId);
 
-    @Query(value = "select LocalDateTime.parse(b.to_timestamp) " +
+    @Query(value = "select b.to_timestamp " +
             "from Booking as b " +
             "where b.item_id = ?1 " +
             "and b.status = 'FUTURE' " +

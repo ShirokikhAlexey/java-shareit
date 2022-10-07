@@ -31,11 +31,11 @@ public class Booking {
     private User bookedBy;
 
     @NonNull
-    @Column(name = "from_timestamp", nullable = false)
+    @Column(name = "from_timestamp", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime from;
 
     @NonNull
-    @Column(name = "to_timestamp", nullable = false)
+    @Column(name = "to_timestamp", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime to;
 
     @NonNull
