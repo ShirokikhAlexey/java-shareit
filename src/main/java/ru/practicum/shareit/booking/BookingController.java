@@ -8,8 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.ItemService;
-import ru.practicum.shareit.item.dto.ItemDto;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -38,7 +36,7 @@ public class BookingController {
 
     @PatchMapping(value = "/{bookingId}")
     public BookingDto update(@PathVariable int bookingId, @RequestParam boolean approved,
-                          @RequestHeader("X-Sharer-User-Id") Integer userId) {
+                             @RequestHeader("X-Sharer-User-Id") Integer userId) {
         try {
             return bookingService.changeStatus(bookingId, approved, userId);
         } catch (NotFoundException e) {
@@ -69,7 +67,7 @@ public class BookingController {
 
     @GetMapping(value = "/owner")
     public List<BookingDto> getUserItemsBookings(@RequestParam String state,
-                                           @RequestHeader("X-Sharer-User-Id") Integer userId) {
+                                                 @RequestHeader("X-Sharer-User-Id") Integer userId) {
         return bookingService.getUserItemsBookings(userId, state);
     }
 

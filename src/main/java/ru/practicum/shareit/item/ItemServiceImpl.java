@@ -1,14 +1,10 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.db.db.BookingRepository;
 import ru.practicum.shareit.db.db.CommentRepository;
 import ru.practicum.shareit.db.db.ItemRepository;
 import ru.practicum.shareit.db.db.UserRepository;
-import ru.practicum.shareit.db.memory.ItemStorageMemory;
-import ru.practicum.shareit.db.memory.UserStorageMemory;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -108,12 +104,12 @@ public class ItemServiceImpl implements ItemService {
     public void addComment(CommentDto commentDto) throws NotFoundException {
         User user;
         Item item;
-        if (userRepository.findById(commentDto.getUser_id()).isPresent()){
+        if (userRepository.findById(commentDto.getUser_id()).isPresent()) {
             user = userRepository.findById(commentDto.getUser_id()).get();
         } else {
             throw new NotFoundException();
         }
-        if (itemRepository.findById(commentDto.getItem_id()).isPresent()){
+        if (itemRepository.findById(commentDto.getItem_id()).isPresent()) {
             item = itemRepository.findById(commentDto.getItem_id()).get();
         } else {
             throw new NotFoundException();
@@ -128,8 +124,8 @@ public class ItemServiceImpl implements ItemService {
     public List<CommentDto> getItemComments(Integer itemId) {
         List<Comment> comments = commentRepository.findByItem_Id(itemId);
         List<CommentDto> commentDtos = new ArrayList<>();
-        for(Comment comment : comments) {
-            commentDtos.add(new CommentDto( comment.getAuthor().getId(), comment.getItem().getId(),
+        for (Comment comment : comments) {
+            commentDtos.add(new CommentDto(comment.getAuthor().getId(), comment.getItem().getId(),
                     comment.getReview()));
         }
         return commentDtos;

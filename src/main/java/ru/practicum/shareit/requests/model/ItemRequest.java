@@ -8,7 +8,6 @@ import ru.practicum.shareit.requests.util.Status;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -21,12 +20,12 @@ public class ItemRequest {
 
     @NonNull
     @ManyToOne
-    @JoinTable(name="users", joinColumns=@JoinColumn(name="id"))
+    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "id"))
     private User author;
 
     @NonNull
     @ManyToOne
-    @JoinTable(name="items", joinColumns=@JoinColumn(name="id"))
+    @JoinTable(name = "items", joinColumns = @JoinColumn(name = "id"))
     private Item suggestion;
 
     @NonNull

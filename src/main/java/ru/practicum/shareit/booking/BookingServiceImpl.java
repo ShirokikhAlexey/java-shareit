@@ -80,7 +80,7 @@ public class BookingServiceImpl implements BookingService {
         } else {
             newStatusValue = Status.REJECTED;
         }
-        if(booking.get().getItem().getOwner().getId() != userId){
+        if (booking.get().getItem().getOwner().getId() != userId) {
             throw new InvalidUserException();
         }
 
@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException();
         }
         if (!Objects.equals(booking.get().getBookedBy().getId(), userId) &&
-                !Objects.equals(booking.get().getItem().getOwner().getId(), userId)){
+                !Objects.equals(booking.get().getItem().getOwner().getId(), userId)) {
             throw new InvalidUserException();
         }
         return BookingMapper.toDto(booking.get());
