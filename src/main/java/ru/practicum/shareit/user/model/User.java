@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.model;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 
 import javax.persistence.*;
@@ -26,7 +27,11 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @OneToMany
-    @JoinTable(name="items", joinColumns=@JoinColumn(name="id"))
+    @OneToMany(mappedBy = "owner")
     private List<Item> items = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bookedBy")
+    private List<Booking> bookings = new ArrayList<>();
+
+    public User(){}
 }
