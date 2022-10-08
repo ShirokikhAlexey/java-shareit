@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS booking (
   from_timestamp timestamp NOT NULL,
   to_timestamp timestamp NOT NULL,
   status booking_status not null default 'WAITING',
-  review TEXT NOT NULL,
+  review TEXT,
   CONSTRAINT pk_booking PRIMARY KEY (id)
 );
 

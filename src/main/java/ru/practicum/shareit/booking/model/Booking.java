@@ -42,7 +42,20 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @NonNull
-    @Column(name = "review", nullable = false)
+    @Column(name = "review", nullable = true)
     private String review;
+
+    public Booking(Item item, User bookedBy, LocalDateTime from, LocalDateTime to, Status status,
+                   String review) {
+        this.bookedBy = bookedBy;
+        this.from = from;
+        this.to = to;
+        this.item = item;
+        this.status = status;
+        this.review = review;
+    }
+
+    public Booking() {
+
+    }
 }

@@ -36,6 +36,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto create(BookingDto bookingDto) throws NotFoundException {
         Optional<User> user = userRepository.findById(bookingDto.getUserId());
         Optional<Item> item = itemRepository.findById(bookingDto.getItemId());
+
         if (user.isEmpty()) {
             throw new NotFoundException();
         }
