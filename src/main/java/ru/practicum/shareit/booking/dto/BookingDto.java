@@ -38,4 +38,14 @@ public class BookingDto {
         this.status = status;
         this.review = review;
     }
+
+    public BookingDto(Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
+                      String review) {
+        this.userId = userId;
+        this.itemId = itemId;
+        this.from = from;
+        this.to = to;
+        this.status = Status.valueOf(status);
+        this.review = review;
+    }
 }

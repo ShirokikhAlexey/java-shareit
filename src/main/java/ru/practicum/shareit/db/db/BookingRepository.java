@@ -10,25 +10,23 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
-    @Query(value = "select new ru.practicum.shareit.booking.BookingDto(b.booked_by_id, b.item_id, b.from_timestamp, " +
-            "b.to_timestamp, b.status, b.review) " +
+    @Query(value = "select new ru.practicum.shareit.booking.dto.BookingDto(b.item.id, b.bookedBy.id, b.from, b.to, b.status, b.review) " +
             "from Booking as b " +
-            "where (upper(b.status) = upper('?2') or upper(?2) = 'ALL') " +
-            "and b.booked_by_id = ?1 " +
-            "order by b.from_timestamp desc", nativeQuery = true)
+            "where (upper(b.status) = upper(?2) or upper(?2) = 'ALL') " +
+            "and b.bookedBy.id = ?1 " +
+            "order by b.from desc")
     List<BookingDto> getByStatus(Integer userId, String state);
 
-    @Query(value = "select new ru.practicum.shareit.booking.BookingDto(b.booked_by_id, b.item_id, b.from_timestamp, " +
-            "b.to_timestamp, b.status, b.review) " +
+    @Query(value = "select new ru.practicum.shareit.booking.dto.BookingDto(b.item.id, b.bookedBy.id, b.from, b.to, b.status, b.review) " +
             "from Booking as b " +
-            "join Item as i on i.id = b.item_id " +
-            "where (upper(b.status) = upper('?2') or upper(?2) = 'ALL') " +
-            "and i.owner_id = ?1 " +
-            "order by b.from_timestamp desc", nativeQuery = true)
+            "join Item as i on i.id = b.item.id " +
+            "where (upper(b.status) = upper(?2) or upper(?2) = 'ALL') " +
+            "and i.owner.id = ?1 " +
+            "order by b.from desc")
     List<BookingDto> getUserItemsBookings(Integer userId, String state);
 
     @Query(value = "select b.to_timestamp " +
-            "from Booking as b " +
+            "from booking as b " +
             "where b.item_id = ?1 " +
             "and b.status = 'PAST' " +
             "order by b.from_timestamp desc " +
@@ -36,7 +34,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     LocalDateTime getItemLatestBooking(Integer itemId);
 
     @Query(value = "select b.to_timestamp " +
-            "from Booking as b " +
+            "from booking as b " +
             "where b.item_id = ?1 " +
             "and b.status = 'FUTURE' " +
             "order by b.from_timestamp asc " +
