@@ -69,8 +69,11 @@ public class ItemController {
     }
 
     @PostMapping(value = "/{itemId}/comment")
-    public void addComment(@RequestBody CommentDto commentDto) {
+    public void addComment(@RequestBody CommentDto commentDto, @PathVariable int itemId,
+                           @RequestHeader("X-Sharer-User-Id") Integer userId) {
         try {
+            commentDto.setItemId(itemId);
+            commentDto.setUserId(userId);
             itemService.addComment(commentDto);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

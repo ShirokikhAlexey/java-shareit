@@ -13,12 +13,16 @@ public class CommentDto {
     @JsonProperty("item_id")
     private Integer itemId;
 
-    @JsonProperty("review")
+    @JsonProperty("text")
     private String review;
 
-    public CommentDto(Integer userId, Integer itemId, String review) {
+    public CommentDto(Integer userId, Integer itemId, String text) {
         this.userId = userId;
         this.itemId = itemId;
-        this.review = review;
+        this.review = text;
+    }
+
+    public CommentDto(String text) {
+        this.review = text;
     }
 }
