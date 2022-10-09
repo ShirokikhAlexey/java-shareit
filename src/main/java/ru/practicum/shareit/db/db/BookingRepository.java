@@ -40,4 +40,11 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "order by b.from_timestamp asc " +
             "limit 1", nativeQuery = true)
     LocalDateTime getItemNearestBooking(Integer itemId);
+
+    @Query(value = "select new ru.practicum.shareit.booking.dto.BookingDto(b.item.id, b.bookedBy.id, b.from, b.to, b.status, b.review) " +
+            "from Booking as b " +
+            "where b.item.id  = ?2 " +
+            "and b.bookedBy.id = ?1 " +
+            "and b.status in ('PAST', 'CURRENT')")
+    BookingDto getUserItemBooking(Integer userId, Integer itemId);
 }

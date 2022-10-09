@@ -18,7 +18,7 @@ public interface ItemService {
 
     List<ItemDto> search(String text);
 
-    void addComment(CommentDto comment) throws NotFoundException;
+    void addComment(CommentDto comment) throws NotFoundException, InvalidUserException;
 
     List<CommentDto> getItemComments(Integer itemId);
 

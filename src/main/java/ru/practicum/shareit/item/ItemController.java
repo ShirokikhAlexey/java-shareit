@@ -77,6 +77,8 @@ public class ItemController {
             itemService.addComment(commentDto);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (InvalidUserException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 }

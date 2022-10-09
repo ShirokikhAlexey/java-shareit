@@ -104,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void addComment(CommentDto commentDto) throws NotFoundException {
+    public void addComment(CommentDto commentDto) throws NotFoundException, InvalidUserException {
         User user;
         Item item;
         if (userRepository.findById(commentDto.getUserId()).isPresent()) {
@@ -116,6 +116,11 @@ public class ItemServiceImpl implements ItemService {
             item = itemRepository.findById(commentDto.getItemId()).get();
         } else {
             throw new NotFoundException();
+        }
+
+        System.out.println(bookingRepository.getUserItemBooking(commentDto.getUserId(), commentDto.getItemId()));
+        if (bookingRepository.getUserItemBooking(commentDto.getUserId(), commentDto.getItemId()) == null) {
+            throw new InvalidUserException();
         }
 
         Comment comment = new Comment(user, item, commentDto.getReview());
