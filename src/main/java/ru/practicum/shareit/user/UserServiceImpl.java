@@ -82,9 +82,5 @@ public class UserServiceImpl implements UserService {
         if (!Pattern.compile(regexPattern).matcher(user.getEmail()).matches()) {
             throw new ValidationException();
         }
-        User sameEmail = repository.findByEmail(user.getEmail());
-        if (sameEmail != null) {
-            throw new InvalidUserException();
-        }
     }
 }

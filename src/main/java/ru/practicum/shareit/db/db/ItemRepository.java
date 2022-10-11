@@ -2,17 +2,18 @@ package ru.practicum.shareit.db.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
-public interface ItemRepository extends JpaRepository<Item, Integer>, ItemRepositoryCustom {
+public interface ItemRepository extends JpaRepository<Item, Integer> {
     List<Item> findByOwner_Id(Integer userId);
 
-    @Query(value = "select it.id " +
-            "from items as it " +
+    @Query(value = "select it" +
+            "from Item as it " +
             "where (lower(it.name) like CONCAT('%',lower(?1),'%') or " +
             "lower(it.description) like CONCAT('%',lower(?1),'%')) " +
-            "and it.available = true", nativeQuery = true)
-    List<Integer> searchIds(String text);
+            "and it.available = true")
+    List<Item> search(String text);
 }
