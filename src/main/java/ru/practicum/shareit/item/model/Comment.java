@@ -1,17 +1,15 @@
 package ru.practicum.shareit.item.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 
-@Data
-@RequiredArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "comments", schema = "public")
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +18,13 @@ public class Comment {
     @JsonIgnore
     @NonNull
     @ManyToOne
+    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "id"))
     private User author;
 
     @JsonIgnore
     @NonNull
     @ManyToOne
+    @JoinTable(name = "items", joinColumns = @JoinColumn(name = "id"))
     private Item item;
 
     @NonNull

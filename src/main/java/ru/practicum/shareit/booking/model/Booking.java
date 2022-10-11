@@ -1,9 +1,7 @@
 package ru.practicum.shareit.booking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.booking.util.Status;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
@@ -11,10 +9,10 @@ import ru.practicum.shareit.user.model.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
-@RequiredArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "booking", schema = "public")
+@Table(name = "booking")
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +21,13 @@ public class Booking {
     @JsonIgnore
     @NonNull
     @ManyToOne
+    @JoinTable(name = "items", joinColumns = @JoinColumn(name = "id"))
     private Item item;
 
     @JsonIgnore
     @NonNull
     @ManyToOne
+    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "id"))
     private User bookedBy;
 
     @NonNull

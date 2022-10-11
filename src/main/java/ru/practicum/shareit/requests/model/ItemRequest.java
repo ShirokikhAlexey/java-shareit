@@ -1,18 +1,16 @@
 package ru.practicum.shareit.requests.model;
 
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.util.Status;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 
-@Data
-@RequiredArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "item_requests", schema = "public")
+@Table(name = "item_requests")
 public class ItemRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
