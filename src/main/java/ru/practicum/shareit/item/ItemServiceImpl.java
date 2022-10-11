@@ -1,10 +1,8 @@
 package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.db.db.BookingRepository;
-import ru.practicum.shareit.db.db.CommentRepository;
-import ru.practicum.shareit.db.db.ItemRepository;
-import ru.practicum.shareit.db.db.UserRepository;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;

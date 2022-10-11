@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.db.db.UserRepository;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.InvalidUserParameters;
 import ru.practicum.shareit.exception.NotFoundException;
