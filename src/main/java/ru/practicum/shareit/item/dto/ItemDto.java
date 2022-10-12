@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class ItemDto {
 
     private LocalDateTime nearestBooking;
 
+    @JsonIgnore
     private List<CommentDto> comments;
 
 
