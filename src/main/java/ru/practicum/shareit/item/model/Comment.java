@@ -30,4 +30,10 @@ public class Comment {
     @NonNull
     @Column(name = "review", nullable = false)
     private String review;
+
+    public Comment(User author, Item item, String review) {
+        this.author = author;
+        this.item = item;
+        this.review = review;
+    }
 }

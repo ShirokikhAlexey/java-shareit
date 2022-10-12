@@ -1,4 +1,4 @@
 package ru.practicum.shareit.exception;
 
-public class InvalidUserException extends Exception {
+public class InvalidUserException extends RuntimeException {
 }

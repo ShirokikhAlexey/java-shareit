@@ -22,40 +22,20 @@ public class ItemController {
 
     @PostMapping()
     public ItemDto create(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        try {
-            ItemDto newItem = itemService.create(item, userId);
-            log.info("Добавлена новая вещь {}", newItem.toString());
-            return newItem;
-        } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (ValidationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-
+        ItemDto newItem = itemService.create(item, userId);
+        log.info("Добавлена новая вещь {}", newItem.toString());
+        return newItem;
     }
 
     @PatchMapping(value = "/{itemId}")
     public ItemDto update(@PathVariable int itemId, @RequestBody ItemDto item,
                           @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        try {
-            return itemService.update(itemId, item, userId);
-        } catch (NotFoundException e) {
-            log.info("Попытка обновления несуществующей записи: {}", item.toString());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (InvalidUserException e) {
-            log.info("Попытка изменения записи не владельцем: {}", item.toString());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        return itemService.update(itemId, item, userId);
     }
 
     @GetMapping(value = "/{itemId}")
     public ItemDto get(@PathVariable int itemId) {
-        try {
-            return itemService.get(itemId);
-        } catch (NotFoundException e) {
-            log.info("Запись не найдена: {}", itemId);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        return itemService.get(itemId);
     }
 
     @GetMapping()
@@ -71,12 +51,8 @@ public class ItemController {
     @PostMapping(value = "/{itemId}/comment")
     public void addComment(@RequestBody CommentDto commentDto, @PathVariable int itemId,
                            @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        try {
-            commentDto.setItemId(itemId);
-            commentDto.setUserId(userId);
-            itemService.addComment(commentDto);
-        } catch (InvalidUserException | NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        commentDto.setItemId(itemId);
+        commentDto.setUserId(userId);
+        itemService.addComment(commentDto);
     }
 }

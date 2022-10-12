@@ -23,48 +23,24 @@ public class UserController {
 
     @PostMapping()
     public UserDto create(@RequestBody UserDto user) {
-        try {
-            UserDto newUser = userService.create(user);
-            log.info("Добавлен новый пользователь {}", newUser.toString());
-            return newUser;
-        } catch (InvalidUserException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (InvalidUserParameters | ValidationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        UserDto newUser = userService.create(user);
+        log.info("Добавлен новый пользователь {}", newUser.toString());
+        return newUser;
     }
 
     @PatchMapping(value = "/{userId}")
     public UserDto update(@PathVariable int userId, @RequestBody UserDto user) {
-        try {
-            return userService.update(user, userId);
-        } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (ValidationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } catch (InvalidUserException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return userService.update(user, userId);
     }
 
     @GetMapping(value = "/{userId}")
     public UserDto get(@PathVariable int userId) {
-        try {
-            return userService.get(userId);
-        } catch (NotFoundException e) {
-            log.info("Запись не найдена: {}", userId);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        return userService.get(userId);
     }
 
     @DeleteMapping(value = "/{userId}")
     public void delete(@PathVariable int userId) {
-        try {
-            userService.delete(userId);
-        } catch (NotFoundException e) {
-            log.info("Запись не найдена: {}", userId);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        userService.delete(userId);
     }
 
     @GetMapping
