@@ -111,7 +111,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getStatusList(Integer userId, String state) {
-        return bookingRepository.getByStatus(userId, state);
+        List<BookingDto> bookings = bookingRepository.getByStatus(userId, state);
+        if (bookings.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return bookings;
     }
 
     @Override
