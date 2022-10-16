@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import ru.practicum.shareit.booking.dto.BookingDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,16 +25,16 @@ public class ItemDto {
     @JsonProperty("available")
     private Boolean available;
 
-    private LocalDateTime latestBooking;
+    private BookingDto latestBooking;
 
-    private LocalDateTime nearestBooking;
+    private BookingDto nearestBooking;
 
     @JsonIgnore
     private List<CommentDto> comments;
 
 
-    public ItemDto(Integer id, String name, String description, Boolean available, LocalDateTime latestBooking,
-                   LocalDateTime nearestBooking) {
+    public ItemDto(Integer id, String name, String description, Boolean available, BookingDto latestBooking,
+                   BookingDto nearestBooking) {
         this.id = id;
         this.name = name;
         this.description = description;

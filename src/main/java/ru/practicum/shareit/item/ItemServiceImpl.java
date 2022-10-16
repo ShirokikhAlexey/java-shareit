@@ -2,6 +2,9 @@ package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -76,12 +79,32 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getAll(Integer userId) {
         List<ItemDto> result = new ArrayList<>();
         for (Item item : itemRepository.findByOwner_Id(userId)) {
-            LocalDateTime latestBookingTime = bookingRepository.getItemLatestBooking(item.getId());
-            LocalDateTime nearestBookingTime = bookingRepository.getItemNearestBooking(item.getId());
             ItemDto itemDto = ItemMapper.toDto(item);
 
-            itemDto.setLatestBooking(latestBookingTime);
-            itemDto.setNearestBooking(nearestBookingTime);
+            BookingDto latestBooking;
+            List<Booking> bookingsLatest = bookingRepository.getItemLatestBooking(item.getId());
+
+            BookingDto nearestBooking;
+            List<Booking> bookingsNearest = bookingRepository.getItemNearestBooking(item.getId());
+
+            System.out.println("TEST");
+            if (bookingsLatest.isEmpty()) {
+                latestBooking = null;
+            } else {
+                System.out.println(bookingsLatest.get(0));
+                latestBooking = BookingMapper.toDto(bookingsLatest.get(0));
+            }
+
+            if (bookingsNearest.isEmpty()) {
+                nearestBooking = null;
+            } else {
+                System.out.println(bookingsNearest.get(0));
+                nearestBooking = BookingMapper.toDto(bookingsNearest.get(0));
+            }
+
+
+            itemDto.setLatestBooking(latestBooking);
+            itemDto.setNearestBooking(nearestBooking);
 
             itemDto.setComments(getItemComments(item.getId()));
             result.add(itemDto);

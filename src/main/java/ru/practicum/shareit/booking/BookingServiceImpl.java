@@ -15,6 +15,7 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,6 +44,10 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException();
         }
         if (item.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        if(Objects.equals(item.get().getOwner().getId(), user.get().getId())) {
             throw new NotFoundException();
         }
         validateNew(BookingMapper.fromDto(user.get(), item.get(), bookingDto));
@@ -79,13 +84,17 @@ public class BookingServiceImpl implements BookingService {
         if (booking.isEmpty()) {
             throw new NotFoundException();
         }
+        if (booking.get().getStatus() == Status.APPROVED) {
+            throw new ValidationException();
+        }
+
         if (newStatus) {
             newStatusValue = Status.APPROVED;
         } else {
             newStatusValue = Status.REJECTED;
         }
         if (booking.get().getItem().getOwner().getId() != userId) {
-            throw new InvalidUserException();
+            throw new NotFoundException();
         }
 
         BookingDto bookingDto = new BookingDto(booking.get().getId(), booking.get().getBookedBy().getId(),
@@ -104,23 +113,74 @@ public class BookingServiceImpl implements BookingService {
         }
         if (!Objects.equals(booking.get().getBookedBy().getId(), userId) &&
                 !Objects.equals(booking.get().getItem().getOwner().getId(), userId)) {
-            throw new InvalidUserException();
+            throw new NotFoundException();
         }
         return BookingMapper.toDto(booking.get());
     }
 
     @Override
     public List<BookingDto> getStatusList(Integer userId, String state) {
-        List<BookingDto> bookings = bookingRepository.getByStatus(userId, state);
+        List<Booking> bookings;
+        switch (state){
+            case "PAST":
+                bookings = bookingRepository.getPast(userId);
+                break;
+            case "CURRENT":
+                bookings = bookingRepository.getCurrent(userId);
+                break;
+            case "FUTURE":
+                bookings = bookingRepository.getFuture(userId);
+                break;
+            case "WAITING":
+            case "REJECTED":
+            case "APPROVED":
+            case "ALL":
+                bookings = bookingRepository.getByStatus(userId, state);
+                break;
+            default:
+                throw new ValidationException("Unknown state: " + state);
+        }
+
         if (bookings.isEmpty()) {
             throw new NotFoundException();
         }
-        return bookings;
+        List<BookingDto> response = new ArrayList<>();
+        for(Booking booking : bookings) {
+            response.add(BookingMapper.toDto(booking));
+        }
+        return response;
     }
 
     @Override
     public List<BookingDto> getUserItemsBookings(Integer userId, String state) {
-        return bookingRepository.getUserItemsBookings(userId, state);
+        List<Booking> bookings;
+        switch (state){
+            case "PAST":
+                bookings = bookingRepository.getOwnerPast(userId);
+                break;
+            case "CURRENT":
+                bookings = bookingRepository.getOwnerCurrent(userId);
+                break;
+            case "FUTURE":
+                bookings = bookingRepository.getOwnerFuture(userId);
+                break;
+            case "WAITING":
+            case "REJECTED":
+            case "APPROVED":
+            case "ALL":
+                bookings = bookingRepository.getUserItemsBookings(userId, state);
+                break;
+            default:
+                throw new ValidationException("Unknown state: " + state);
+        }
+        if (bookings.isEmpty()) {
+            throw new NotFoundException();
+        }
+        List<BookingDto> response = new ArrayList<>();
+        for(Booking booking : bookings) {
+            response.add(BookingMapper.toDto(booking));
+        }
+        return response;
     }
 
     private void validateNew(Booking booking) {
