@@ -23,7 +23,7 @@ public class Item {
     @JsonIgnore
     @NonNull
     @ManyToOne
-    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "id"))
+    @JoinColumn(name = "owner_id", insertable = true)
     private User owner;
 
     @NonNull

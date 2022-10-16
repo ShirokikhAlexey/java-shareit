@@ -18,13 +18,13 @@ public class Comment {
     @JsonIgnore
     @NonNull
     @ManyToOne
-    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "id"))
+    @JoinColumn(name = "author_id")
     private User author;
 
     @JsonIgnore
     @NonNull
     @ManyToOne
-    @JoinTable(name = "items", joinColumns = @JoinColumn(name = "id"))
+    @JoinColumn(name = "item_id")
     private Item item;
 
     @NonNull
