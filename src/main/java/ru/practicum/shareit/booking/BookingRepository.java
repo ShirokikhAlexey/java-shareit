@@ -73,14 +73,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.item.id = ?1 " +
-            "and b.status = 'PAST' " +
-            "order by b.from desc ")
+            "and b.to <= now() " +
+            "order by b.to desc ")
     List<Booking> getItemLatestBooking(Integer itemId);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.item.id = ?1 " +
-            "and b.status = 'FUTURE' " +
+            "and b.from >= now() " +
             "order by b.from asc ")
     List<Booking> getItemNearestBooking(Integer itemId);
 

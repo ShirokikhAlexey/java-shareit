@@ -23,7 +23,7 @@ public class BookingController {
     @PostMapping()
     public BookingDto create(@RequestBody BookingDto bookingDto,
                              @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        bookingDto.setUserId(userId);
+        bookingDto.setBookerId(userId);
         BookingDto newBooking = bookingService.create(bookingDto);
         log.info("Добавлен новый запрос на бронирование вещи {}", newBooking.toString());
         return newBooking;

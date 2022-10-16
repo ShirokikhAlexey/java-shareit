@@ -71,6 +71,28 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException();
         }
         ItemDto itemDto = ItemMapper.toDto(item.get());
+
+        BookingDto latestBooking;
+        List<Booking> bookingsLatest = bookingRepository.getItemLatestBooking(item.get().getId());
+
+        BookingDto nearestBooking;
+        List<Booking> bookingsNearest = bookingRepository.getItemNearestBooking(item.get().getId());
+
+        if (bookingsLatest.isEmpty()) {
+            latestBooking = null;
+        } else {
+            latestBooking = BookingMapper.toDto(bookingsLatest.get(0));
+        }
+
+        if (bookingsNearest.isEmpty()) {
+            nearestBooking = null;
+        } else {
+            nearestBooking = BookingMapper.toDto(bookingsNearest.get(0));
+        }
+
+
+        itemDto.setLastBooking(latestBooking);
+        itemDto.setNextBooking(nearestBooking);
         itemDto.setComments(getItemComments(itemId));
         return itemDto;
     }
@@ -87,7 +109,6 @@ public class ItemServiceImpl implements ItemService {
             BookingDto nearestBooking;
             List<Booking> bookingsNearest = bookingRepository.getItemNearestBooking(item.getId());
 
-            System.out.println("TEST");
             if (bookingsLatest.isEmpty()) {
                 latestBooking = null;
             } else {
@@ -103,8 +124,8 @@ public class ItemServiceImpl implements ItemService {
             }
 
 
-            itemDto.setLatestBooking(latestBooking);
-            itemDto.setNearestBooking(nearestBooking);
+            itemDto.setLastBooking(latestBooking);
+            itemDto.setNextBooking(nearestBooking);
 
             itemDto.setComments(getItemComments(item.getId()));
             result.add(itemDto);

@@ -25,9 +25,9 @@ public class ItemDto {
     @JsonProperty("available")
     private Boolean available;
 
-    private BookingDto latestBooking;
+    private BookingDto lastBooking;
 
-    private BookingDto nearestBooking;
+    private BookingDto nextBooking;
 
     @JsonIgnore
     private List<CommentDto> comments;
@@ -39,8 +39,8 @@ public class ItemDto {
         this.name = name;
         this.description = description;
         this.available = available;
-        this.latestBooking = latestBooking;
-        this.nearestBooking = nearestBooking;
+        this.lastBooking = latestBooking;
+        this.nextBooking = nearestBooking;
     }
 
     public ItemDto(Integer id, String name, String description, Boolean available) {

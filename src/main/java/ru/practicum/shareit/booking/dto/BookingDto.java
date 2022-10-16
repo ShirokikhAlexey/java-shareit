@@ -16,8 +16,8 @@ public class BookingDto {
     @JsonProperty("id")
     private Integer id;
 
-    @JsonProperty("userId")
-    private Integer userId;
+    @JsonProperty("bookerId")
+    private Integer bookerId;
 
     @JsonProperty("itemId")
     private Integer itemId;
@@ -43,7 +43,7 @@ public class BookingDto {
     public BookingDto(Integer id, Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
                       String review) {
         this.id = id;
-        this.userId = userId;
+        this.bookerId = userId;
         this.itemId = itemId;
         this.from = from;
         this.to = to;
@@ -54,7 +54,7 @@ public class BookingDto {
     public BookingDto(Integer id , Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
                       String review) {
         this.id = id;
-        this.userId = userId;
+        this.bookerId = userId;
         this.itemId = itemId;
         this.from = from;
         this.to = to;
@@ -65,7 +65,7 @@ public class BookingDto {
     public BookingDto(Integer id , Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
                       String review, UserDto booker, ItemDto item) {
         this.id = id;
-        this.userId = userId;
+        this.bookerId = userId;
         this.itemId = itemId;
         this.from = from;
         this.to = to;
@@ -78,7 +78,7 @@ public class BookingDto {
     public BookingDto(Integer id , Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
                       String review, UserDto booker, ItemDto item) {
         this.id = id;
-        this.userId = userId;
+        this.bookerId = userId;
         this.itemId = itemId;
         this.from = from;
         this.to = to;
