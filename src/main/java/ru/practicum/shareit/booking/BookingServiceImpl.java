@@ -5,6 +5,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.util.Status;
+import ru.practicum.shareit.exception.InvalidItemException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.exception.InvalidUserException;
@@ -12,6 +13,8 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
+import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,6 +45,7 @@ public class BookingServiceImpl implements BookingService {
         if (item.isEmpty()) {
             throw new NotFoundException();
         }
+        validateNew(BookingMapper.fromDto(user.get(), item.get(), bookingDto));
 
         return BookingMapper.toDto(bookingRepository.save(BookingMapper.fromDto(user.get(), item.get(), bookingDto)));
     }
@@ -84,7 +88,7 @@ public class BookingServiceImpl implements BookingService {
             throw new InvalidUserException();
         }
 
-        BookingDto bookingDto = new BookingDto(booking.get().getBookedBy().getId(),
+        BookingDto bookingDto = new BookingDto(booking.get().getId(), booking.get().getBookedBy().getId(),
                 booking.get().getItem().getId(), booking.get().getFrom(), booking.get().getTo(), newStatusValue,
                 booking.get().getReview());
         Booking updatedBooking = BookingMapper.updateFromDto(booking.get(), bookingDto);
@@ -113,5 +117,23 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getUserItemsBookings(Integer userId, String state) {
         return bookingRepository.getUserItemsBookings(userId, state);
+    }
+
+    private void validateNew(Booking booking) {
+        if (booking.getFrom().isBefore(LocalDateTime.now())) {
+            throw new ValidationException();
+        }
+
+        if (booking.getTo().isBefore(LocalDateTime.now())) {
+            throw new ValidationException();
+        }
+
+        if (booking.getTo().isBefore(booking.getFrom())) {
+            throw new ValidationException();
+        }
+
+        if (!booking.getItem().getAvailable()) {
+            throw new InvalidItemException();
+        }
     }
 }

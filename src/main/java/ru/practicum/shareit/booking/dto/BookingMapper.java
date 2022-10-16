@@ -6,7 +6,7 @@ import ru.practicum.shareit.user.model.User;
 
 public class BookingMapper {
     public static BookingDto toDto(Booking booking) {
-        return new BookingDto(booking.getBookedBy().getId(), booking.getItem().getId(), booking.getFrom(),
+        return new BookingDto(booking.getId(), booking.getBookedBy().getId(), booking.getItem().getId(), booking.getFrom(),
                 booking.getTo(), booking.getStatus(), booking.getReview());
     }
 

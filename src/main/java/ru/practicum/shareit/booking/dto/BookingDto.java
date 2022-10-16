@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 @Data
 @RequiredArgsConstructor
 public class BookingDto {
+    @JsonProperty("id")
+    private Integer id;
+
     @JsonProperty("userId")
     private Integer userId;
 
@@ -29,8 +32,9 @@ public class BookingDto {
     @JsonProperty("review")
     private String review;
 
-    public BookingDto(Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
+    public BookingDto(Integer id, Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
                       String review) {
+        this.id = id;
         this.userId = userId;
         this.itemId = itemId;
         this.from = from;
@@ -39,8 +43,9 @@ public class BookingDto {
         this.review = review;
     }
 
-    public BookingDto(Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
+    public BookingDto(Integer id , Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
                       String review) {
+        this.id = id;
         this.userId = userId;
         this.itemId = itemId;
         this.from = from;
