@@ -21,13 +21,13 @@ public class Booking {
     @JsonIgnore
     @NonNull
     @ManyToOne
-    @JoinTable(name = "items", joinColumns = @JoinColumn(name = "id"))
+    @JoinColumn(name = "item_id")
     private Item item;
 
     @JsonIgnore
     @NonNull
     @ManyToOne
-    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "id"))
+    @JoinColumn(name = "booked_by_id")
     private User bookedBy;
 
     @NonNull

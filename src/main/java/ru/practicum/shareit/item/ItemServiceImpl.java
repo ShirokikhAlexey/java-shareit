@@ -116,7 +116,6 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException();
         }
 
-        System.out.println(bookingRepository.getUserItemBooking(commentDto.getUserId(), commentDto.getItemId()));
         if (bookingRepository.getUserItemBooking(commentDto.getUserId(), commentDto.getItemId()) == null) {
             throw new InvalidUserException();
         }
