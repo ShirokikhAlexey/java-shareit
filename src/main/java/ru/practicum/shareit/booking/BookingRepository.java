@@ -34,7 +34,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query(value = "select b " +
             "from Booking as b " +
-            "where b.from < now() and b.to > now() " +
+            "where b.from <= now() and b.to >= now() " +
             "and b.bookedBy.id = ?1 " +
             "order by b.from desc")
     List<Booking> getCurrent(Integer userId);
@@ -58,7 +58,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
-            "where b.from < now() and b.to > now() " +
+            "where b.from <= now() and b.to >= now() " +
             "and i.owner.id = ?1 " +
             "order by b.from desc")
     List<Booking> getOwnerCurrent(Integer userId);
