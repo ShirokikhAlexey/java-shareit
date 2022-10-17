@@ -38,8 +38,7 @@ public class Booking {
     @Column(name = "to_timestamp", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime to;
 
-    @NonNull
-    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "review", nullable = true)

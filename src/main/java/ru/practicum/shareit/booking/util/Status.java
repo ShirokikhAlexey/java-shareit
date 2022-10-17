@@ -6,5 +6,6 @@ public enum Status {
     FUTURE,
     WAITING,
     REJECTED,
-    APPROVED
+    APPROVED,
+    ALL
 }

@@ -19,6 +19,7 @@ import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -65,7 +66,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto get(Integer itemId) throws NotFoundException {
+    public ItemDto get(Integer itemId, Integer userId) throws NotFoundException {
         Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) {
             throw new NotFoundException();
@@ -78,13 +79,13 @@ public class ItemServiceImpl implements ItemService {
         BookingDto nearestBooking;
         List<Booking> bookingsNearest = bookingRepository.getItemNearestBooking(item.get().getId());
 
-        if (bookingsLatest.isEmpty()) {
+        if (bookingsLatest.isEmpty() || !Objects.equals(item.get().getOwner().getId(), userId)) {
             latestBooking = null;
         } else {
             latestBooking = BookingMapper.toDto(bookingsLatest.get(0));
         }
 
-        if (bookingsNearest.isEmpty()) {
+        if (bookingsNearest.isEmpty() || !Objects.equals(item.get().getOwner().getId(), userId)) {
             nearestBooking = null;
         } else {
             nearestBooking = BookingMapper.toDto(bookingsNearest.get(0));

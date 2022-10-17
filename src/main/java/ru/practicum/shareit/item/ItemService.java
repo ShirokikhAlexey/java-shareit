@@ -12,7 +12,7 @@ public interface ItemService {
 
     ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException, InvalidUserException;
 
-    ItemDto get(Integer itemId) throws NotFoundException;
+    ItemDto get(Integer itemId, Integer userId) throws NotFoundException;
 
     List<ItemDto> getAll(Integer itemId);
 

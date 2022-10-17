@@ -135,7 +135,7 @@ public class BookingServiceImpl implements BookingService {
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getByStatus(userId, state);
+                bookings = bookingRepository.getByStatus(userId, Status.valueOf(state));
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);
@@ -168,7 +168,7 @@ public class BookingServiceImpl implements BookingService {
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getUserItemsBookings(userId, state);
+                bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state));
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);
