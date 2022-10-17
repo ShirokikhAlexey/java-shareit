@@ -43,11 +43,11 @@ public class Comment {
         this.review = review;
     }
 
-    public Comment(User author, Item item, String review, LocalDateTime created_at) {
+    public Comment(User author, Item item, String review, LocalDateTime createdAt) {
         this.author = author;
         this.item = item;
         this.review = review;
-        this.createdAt = created_at;
+        this.createdAt = createdAt;
     }
 
     public Comment() {
