@@ -35,7 +35,7 @@ public class Comment {
     private String review;
 
     @Column(name = "created_at")
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     public Comment(User author, Item item, String review) {
         this.author = author;
@@ -47,7 +47,7 @@ public class Comment {
         this.author = author;
         this.item = item;
         this.review = review;
-        this.created_at = created_at;
+        this.createdAt = created_at;
     }
 
     public Comment() {

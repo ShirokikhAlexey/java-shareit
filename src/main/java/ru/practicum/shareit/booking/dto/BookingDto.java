@@ -51,7 +51,7 @@ public class BookingDto {
         this.review = review;
     }
 
-    public BookingDto(Integer id , Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
+    public BookingDto(Integer id, Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
                       String review) {
         this.id = id;
         this.bookerId = userId;
@@ -62,7 +62,7 @@ public class BookingDto {
         this.review = review;
     }
 
-    public BookingDto(Integer id , Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
+    public BookingDto(Integer id, Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, String status,
                       String review, UserDto booker, ItemDto item) {
         this.id = id;
         this.bookerId = userId;
@@ -75,7 +75,7 @@ public class BookingDto {
         this.item = item;
     }
 
-    public BookingDto(Integer id , Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
+    public BookingDto(Integer id, Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
                       String review, UserDto booker, ItemDto item) {
         this.id = id;
         this.bookerId = userId;
