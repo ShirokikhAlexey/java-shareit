@@ -1,10 +1,13 @@
 package ru.practicum.shareit.item.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,9 +34,23 @@ public class Comment {
     @Column(name = "review", nullable = false)
     private String review;
 
+    @Column(name = "created_at")
+    private LocalDateTime created_at;
+
     public Comment(User author, Item item, String review) {
         this.author = author;
         this.item = item;
         this.review = review;
+    }
+
+    public Comment(User author, Item item, String review, LocalDateTime created_at) {
+        this.author = author;
+        this.item = item;
+        this.review = review;
+        this.created_at = created_at;
+    }
+
+    public Comment() {
+
     }
 }

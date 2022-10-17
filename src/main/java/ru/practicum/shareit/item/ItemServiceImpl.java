@@ -5,6 +5,8 @@ import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.exception.InvalidItemException;
+import ru.practicum.shareit.item.dto.CommentMapper;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -147,7 +149,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void addComment(CommentDto commentDto) throws NotFoundException, InvalidUserException {
+    public CommentDto addComment(CommentDto commentDto) throws NotFoundException, InvalidUserException {
+        if(commentDto.getReview().isEmpty()) {
+            throw new ValidationException();
+        }
+
         User user;
         Item item;
         if (userRepository.findById(commentDto.getUserId()).isPresent()) {
@@ -161,13 +167,11 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException();
         }
 
-        if (bookingRepository.getUserItemBooking(commentDto.getUserId(), commentDto.getItemId()) == null) {
-            throw new InvalidUserException();
+        if (bookingRepository.getUserItemBooking(commentDto.getUserId(), commentDto.getItemId()).isEmpty()) {
+            throw new InvalidItemException();
         }
 
-        Comment comment = new Comment(user, item, commentDto.getReview());
-
-        commentRepository.save(comment);
+        return CommentMapper.toDto(commentRepository.save(CommentMapper.fromDto(user, item, commentDto)));
     }
 
     @Override
@@ -175,8 +179,7 @@ public class ItemServiceImpl implements ItemService {
         List<Comment> comments = commentRepository.findByItem_Id(itemId);
         List<CommentDto> commentDtos = new ArrayList<>();
         for (Comment comment : comments) {
-            commentDtos.add(new CommentDto(comment.getAuthor().getId(), comment.getItem().getId(),
-                    comment.getReview()));
+            commentDtos.add(CommentMapper.toDto(comment));
         }
         return commentDtos;
     }

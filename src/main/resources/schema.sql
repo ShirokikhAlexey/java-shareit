@@ -39,5 +39,6 @@ CREATE TABLE IF NOT EXISTS comments (
   item_id BIGINT NOT NULL REFERENCES items (id),
   author_id BIGINT NOT NULL REFERENCES users (id),
   review TEXT NOT NULL,
+  created_at timestamp not null default current_timestamp,
   CONSTRAINT pk_comments PRIMARY KEY (id)
 );

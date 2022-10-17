@@ -29,7 +29,7 @@ public class ItemDto {
 
     private BookingDto nextBooking;
 
-    @JsonIgnore
+    @JsonProperty("comments")
     private List<CommentDto> comments;
 
 

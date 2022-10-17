@@ -91,6 +91,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "from Booking as b " +
             "where b.item.id  = ?2 " +
             "and b.bookedBy.id = ?1 " +
-            "and b.status in ('PAST', 'CURRENT')")
-    Booking getUserItemBooking(Integer userId, Integer itemId);
+            "and b.status in ('PAST', 'CURRENT', 'APPROVED') " +
+            "and b.from < now()")
+    List<Booking> getUserItemBooking(Integer userId, Integer itemId);
 }
