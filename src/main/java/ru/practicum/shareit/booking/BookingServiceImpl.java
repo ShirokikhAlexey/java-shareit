@@ -6,11 +6,11 @@ import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.util.Status;
 import ru.practicum.shareit.exception.InvalidItemException;
-import ru.practicum.shareit.item.ItemRepository;
-import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
@@ -47,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException();
         }
 
-        if(Objects.equals(item.get().getOwner().getId(), user.get().getId())) {
+        if (Objects.equals(item.get().getOwner().getId(), user.get().getId())) {
             throw new NotFoundException();
         }
         validateNew(BookingMapper.fromDto(user.get(), item.get(), bookingDto));
@@ -121,7 +121,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getStatusList(Integer userId, String state) {
         List<Booking> bookings;
-        switch (state){
+        switch (state) {
             case "PAST":
                 bookings = bookingRepository.getPast(userId);
                 break;
@@ -145,7 +145,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException();
         }
         List<BookingDto> response = new ArrayList<>();
-        for(Booking booking : bookings) {
+        for (Booking booking : bookings) {
             response.add(BookingMapper.toDto(booking));
         }
         return response;
@@ -154,7 +154,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getUserItemsBookings(Integer userId, String state) {
         List<Booking> bookings;
-        switch (state){
+        switch (state) {
             case "PAST":
                 bookings = bookingRepository.getOwnerPast(userId);
                 break;
@@ -177,7 +177,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException();
         }
         List<BookingDto> response = new ArrayList<>();
-        for(Booking booking : bookings) {
+        for (Booking booking : bookings) {
             response.add(BookingMapper.toDto(booking));
         }
         return response;

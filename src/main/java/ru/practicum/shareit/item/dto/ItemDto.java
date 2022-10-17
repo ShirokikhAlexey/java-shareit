@@ -1,13 +1,11 @@
 package ru.practicum.shareit.item.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data

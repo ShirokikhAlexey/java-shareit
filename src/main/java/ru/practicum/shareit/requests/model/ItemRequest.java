@@ -1,6 +1,8 @@
 package ru.practicum.shareit.requests.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.util.Status;
 import ru.practicum.shareit.user.model.User;

@@ -2,15 +2,10 @@ package ru.practicum.shareit.item;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import ru.practicum.shareit.exception.InvalidUserException;
-import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import javax.validation.ValidationException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +46,7 @@ public class ItemController {
 
     @PostMapping(value = "/{itemId}/comment")
     public CommentDto addComment(@RequestBody CommentDto commentDto, @PathVariable int itemId,
-                           @RequestHeader("X-Sharer-User-Id") Integer userId) {
+                                 @RequestHeader("X-Sharer-User-Id") Integer userId) {
         commentDto.setItemId(itemId);
         commentDto.setUserId(userId);
         return itemService.addComment(commentDto);

@@ -1,7 +1,9 @@
 package ru.practicum.shareit.booking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import ru.practicum.shareit.booking.util.Status;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
@@ -41,7 +43,7 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "review", nullable = true)
+    @Column(name = "review")
     private String review;
 
     public Booking(Item item, User bookedBy, LocalDateTime from, LocalDateTime to, String status,
