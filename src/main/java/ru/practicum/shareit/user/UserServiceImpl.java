@@ -1,24 +1,27 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.db.memory.UserStorageMemory;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.InvalidUserParameters;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
+import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    UserStorageMemory userStorage;
+    private final UserRepository repository;
+
+    public UserServiceImpl(UserRepository repository) {
+        this.repository = repository;
+    }
 
 
     @Override
@@ -28,39 +31,39 @@ public class UserServiceImpl implements UserService {
         }
         validate(user);
 
-        return UserMapper.toDto(userStorage.create(UserMapper.userFromDto(user)));
+        return UserMapper.toDto(repository.save(UserMapper.userFromDto(user)));
     }
 
     @Override
     public UserDto update(UserDto userDto, Integer userId) throws NotFoundException, InvalidUserException {
-        User user = userStorage.get(userId);
-        if (user == null) {
+        Optional<User> user = repository.findById(userId);
+        if (user.isEmpty()) {
             throw new NotFoundException();
         }
         validate(userDto);
-        User updatedUser = UserMapper.updateFromDto(user, userDto);
-        userStorage.update(updatedUser);
+        User updatedUser = UserMapper.updateFromDto(user.get(), userDto);
+        repository.save(updatedUser);
         return UserMapper.toDto(updatedUser);
     }
 
     @Override
     public UserDto get(Integer userId) throws NotFoundException {
-        User user = userStorage.get(userId);
-        if (user == null) {
+        Optional<User> user = repository.findById(userId);
+        if (user.isEmpty()) {
             throw new NotFoundException();
         }
-        return UserMapper.toDto(user);
+        return UserMapper.toDto(user.get());
     }
 
     @Override
     public void delete(Integer userId) throws NotFoundException {
-        userStorage.delete(userId);
+        repository.deleteById(userId);
     }
 
     @Override
     public List<UserDto> getAll() {
         List<UserDto> result = new ArrayList<>();
-        for (User user : userStorage.getAll()) {
+        for (User user : repository.findAll()) {
             result.add(UserMapper.toDto(user));
         }
         return result;
@@ -77,10 +80,6 @@ public class UserServiceImpl implements UserService {
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         if (!Pattern.compile(regexPattern).matcher(user.getEmail()).matches()) {
             throw new ValidationException();
-        }
-        User sameEmail = userStorage.findByEmail(user.getEmail());
-        if (sameEmail != null) {
-            throw new InvalidUserException();
         }
     }
 }
