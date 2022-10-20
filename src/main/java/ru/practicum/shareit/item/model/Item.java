@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -43,6 +44,9 @@ public class Item {
 
     @OneToMany(mappedBy = "item")
     private List<Comment> comments;
+
+    @ManyToMany(mappedBy = "suggestions")
+    private List<ItemRequest> requests;
 
     public Item() {
 
