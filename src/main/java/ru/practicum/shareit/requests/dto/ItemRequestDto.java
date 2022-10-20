@@ -13,10 +13,10 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 public class ItemRequestDto {
-    @NonNull
+
     private User author;
-    @NonNull
+
     private List<Item> suggestions;
-    @NonNull
-    private Status closed;
+
+    private Status status;
 }
