@@ -32,13 +32,27 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public ItemRequestDto get(Integer itemRequestId) {
-        return null;
+        Optional<ItemRequest> request = itemRequestRepository.findById(itemRequestId);
+        if (request.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return ItemRequestDtoMapper.toDto(request.get());
     }
 
     @Override
-    public List<ItemRequestDto> getAll(Integer userId) {
+    public List<ItemRequestDto> getUserAll(Integer userId) {
         List<ItemRequestDto> response = new ArrayList<>();
         List<ItemRequest> userRequests = itemRequestRepository.getUserRequests(userId);
+        for (ItemRequest request : userRequests) {
+            response.add(ItemRequestDtoMapper.toDto(request));
+        }
+        return response;
+    }
+
+    @Override
+    public List<ItemRequestDto> getAll(Integer from, Integer size) {
+        List<ItemRequestDto> response = new ArrayList<>();
+        List<ItemRequest> userRequests = itemRequestRepository.getAllRequests(from, size);
         for (ItemRequest request : userRequests) {
             response.add(ItemRequestDtoMapper.toDto(request));
         }
