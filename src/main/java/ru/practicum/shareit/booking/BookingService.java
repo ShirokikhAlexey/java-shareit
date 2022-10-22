@@ -4,7 +4,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface BookingService {

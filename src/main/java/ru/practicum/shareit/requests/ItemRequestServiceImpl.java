@@ -2,19 +2,16 @@ package ru.practicum.shareit.requests;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.ItemRequestDtoMapper;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,7 +37,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     private void validate(ItemRequestDto requestDto) {
-        if(requestDto.getDescription() == null) {
+        if (requestDto.getDescription() == null) {
             throw new ValidationException();
         }
     }
@@ -77,9 +74,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         List<ItemRequestDto> response = new ArrayList<>();
         List<ItemRequest> userRequests;
         if (userId != null) {
-             userRequests = itemRequestRepository.getAllUsersRequests(userId, PageRequest.of(from/size, size));
+            userRequests = itemRequestRepository.getAllUsersRequests(userId, PageRequest.of(from / size, size));
         } else {
-            userRequests = itemRequestRepository.getAllRequests(PageRequest.of(from/size, size));
+            userRequests = itemRequestRepository.getAllRequests(PageRequest.of(from / size, size));
         }
 
         for (ItemRequest request : userRequests) {

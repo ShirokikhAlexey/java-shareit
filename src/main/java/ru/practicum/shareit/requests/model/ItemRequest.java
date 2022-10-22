@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.util.Status;
 import ru.practicum.shareit.user.model.User;
@@ -42,8 +41,8 @@ public class ItemRequest {
     @ManyToMany()
     @JoinTable(
             name = "item_suggestions",
-            joinColumns = { @JoinColumn(name = "request_id") },
-            inverseJoinColumns = { @JoinColumn(name = "item_id") }
+            joinColumns = {@JoinColumn(name = "request_id")},
+            inverseJoinColumns = {@JoinColumn(name = "item_id")}
     )
     private List<Item> suggestions;
 
