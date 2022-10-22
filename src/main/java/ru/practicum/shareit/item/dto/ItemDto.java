@@ -23,6 +23,9 @@ public class ItemDto {
     @JsonProperty("available")
     private Boolean available;
 
+    @JsonProperty("requestId")
+    private Integer requestId;
+
     private BookingDto lastBooking;
 
     private BookingDto nextBooking;
@@ -46,5 +49,13 @@ public class ItemDto {
         this.name = name;
         this.description = description;
         this.available = available;
+    }
+
+    public ItemDto(Integer id, String name, String description, Boolean available, Integer requestId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.requestId = requestId;
     }
 }

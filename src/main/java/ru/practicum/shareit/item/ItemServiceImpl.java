@@ -14,6 +14,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.requests.ItemRequestRepository;
+import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -34,12 +36,16 @@ public class ItemServiceImpl implements ItemService {
 
     private final CommentRepository commentRepository;
 
+    private final ItemRequestRepository itemRequestRepository;
+
     public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository,
-                           BookingRepository bookingRepository, CommentRepository commentRepository) {
+                           BookingRepository bookingRepository, CommentRepository commentRepository,
+                           ItemRequestRepository itemRequestRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
+        this.itemRequestRepository = itemRequestRepository;
     }
 
     @Override
@@ -49,7 +55,25 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException();
         }
         validate(item);
-        return ItemMapper.toDto(itemRepository.save(ItemMapper.fromDto(user.get(), item)));
+        Item saved = itemRepository.save(ItemMapper.fromDto(user.get(), item));
+        if (item.getRequestId() != null) {
+            addRequestSuggestion(item.getRequestId(), saved);
+        }
+        return ItemMapper.toDto(saved);
+    }
+
+    private void addRequestSuggestion(Integer requestId, Item suggestion) {
+        Optional<ItemRequest> request = itemRequestRepository.findById(requestId);
+        if (request.isEmpty()) {
+            throw new NotFoundException();
+        }
+        ItemRequest requestObject = request.get();
+        if (requestObject.getSuggestions() == null) {
+            requestObject.setSuggestions(List.of(suggestion));
+        } else {
+            requestObject.getSuggestions().add(suggestion);
+        }
+        itemRequestRepository.save(requestObject);
     }
 
     @Override
