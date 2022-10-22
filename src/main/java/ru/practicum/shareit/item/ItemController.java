@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import javax.validation.ValidationException;
 import java.util.List;
 
 @Slf4j
@@ -38,6 +39,9 @@ public class ItemController {
     public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Integer userId,
                                 @RequestParam(defaultValue = "0", required = false) Integer from,
                                 @RequestParam(defaultValue = "10", required = false) Integer size) {
+        if (from < 0 || size < 0) {
+            throw new ValidationException();
+        }
         return itemService.getAll(userId, from, size);
     }
 
@@ -45,6 +49,9 @@ public class ItemController {
     public List<ItemDto> search(@RequestParam String text,
                                 @RequestParam(defaultValue = "0", required = false) Integer from,
                                 @RequestParam(defaultValue = "10", required = false) Integer size) {
+        if (from < 0 || size < 0) {
+            throw new ValidationException();
+        }
         return itemService.search(text, from, size);
     }
 

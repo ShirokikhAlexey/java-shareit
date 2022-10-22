@@ -58,4 +58,11 @@ public class ItemDto {
         this.available = available;
         this.requestId = requestId;
     }
+
+    public ItemDto(String name, String description, Boolean available, Integer requestId) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.requestId = requestId;
+    }
 }

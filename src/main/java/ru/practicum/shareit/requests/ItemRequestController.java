@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 
+import javax.validation.ValidationException;
 import java.util.List;
 
 
@@ -32,6 +33,9 @@ public class ItemRequestController {
     @GetMapping("/all")
     public List<ItemRequestDto> search(@RequestParam(defaultValue = "0", required = false) Integer from,
                                        @RequestParam(defaultValue = "10", required = false) Integer size) {
+        if (from < 0 || size < 0) {
+            throw new ValidationException();
+        }
         return itemRequestService.getAll(from, size);
     }
 

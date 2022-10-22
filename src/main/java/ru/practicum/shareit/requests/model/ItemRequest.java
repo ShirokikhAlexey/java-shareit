@@ -39,7 +39,12 @@ public class ItemRequest {
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime created_at;
 
-    @ManyToMany(mappedBy = "requests")
+    @ManyToMany()
+    @JoinTable(
+            name = "item_suggestions",
+            joinColumns = { @JoinColumn(name = "request_id") },
+            inverseJoinColumns = { @JoinColumn(name = "item_id") }
+    )
     private List<Item> suggestions;
 
     public ItemRequest(User author, String description, Status status) {

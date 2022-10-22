@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -126,7 +127,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getAll(Integer userId, Integer from, Integer size) {
         List<ItemDto> result = new ArrayList<>();
-        for (Item item : itemRepository.findByOwner_Id(userId, from, size)) {
+        for (Item item : itemRepository.findByOwner_Id(userId, PageRequest.of(from/size, size))) {
             ItemDto itemDto = ItemMapper.toDto(item);
 
             BookingDto latestBooking;
@@ -165,7 +166,7 @@ public class ItemServiceImpl implements ItemService {
         if (text.isEmpty()) {
             return result;
         }
-        for (Item item : itemRepository.search(text, from, size)) {
+        for (Item item : itemRepository.search(text, PageRequest.of(from/size, size))) {
             result.add(ItemMapper.toDto(item));
         }
         return result;

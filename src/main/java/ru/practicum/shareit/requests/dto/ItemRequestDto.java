@@ -1,6 +1,7 @@
 package ru.practicum.shareit.requests.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,15 +13,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@RequiredArgsConstructor
 public class ItemRequestDto {
+    @JsonProperty("description")
     private String description;
 
     private User author;
 
     private List<Item> suggestions;
 
-    private Status status;
+    @JsonProperty("status")
+    private Status status = Status.OPEN;
 
+    @JsonProperty("createdAt")
     private LocalDateTime createdAt;
 
     public ItemRequestDto(String description, User author, List<Item> suggestions,

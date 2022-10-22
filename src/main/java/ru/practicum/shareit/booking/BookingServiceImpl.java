@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -123,19 +124,20 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings;
         switch (state) {
             case "PAST":
-                bookings = bookingRepository.getPast(userId, from, size);
+                bookings = bookingRepository.getPast(userId, PageRequest.of(from / size, size));
                 break;
             case "CURRENT":
-                bookings = bookingRepository.getCurrent(userId, from, size);
+                bookings = bookingRepository.getCurrent(userId, PageRequest.of(from / size, size));
                 break;
             case "FUTURE":
-                bookings = bookingRepository.getFuture(userId, from, size);
+                bookings = bookingRepository.getFuture(userId, PageRequest.of(from / size, size));
                 break;
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getByStatus(userId, Status.valueOf(state), from, size);
+                bookings = bookingRepository.getByStatus(userId, Status.valueOf(state),
+                        PageRequest.of(from / size, size));
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);
@@ -156,19 +158,20 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings;
         switch (state) {
             case "PAST":
-                bookings = bookingRepository.getOwnerPast(userId, from, size);
+                bookings = bookingRepository.getOwnerPast(userId, PageRequest.of(from/size, size));
                 break;
             case "CURRENT":
-                bookings = bookingRepository.getOwnerCurrent(userId, from, size);
+                bookings = bookingRepository.getOwnerCurrent(userId, PageRequest.of(from/size, size));
                 break;
             case "FUTURE":
-                bookings = bookingRepository.getOwnerFuture(userId, from, size);
+                bookings = bookingRepository.getOwnerFuture(userId, PageRequest.of(from/size, size));
                 break;
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state), from, size);
+                bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state),
+                        PageRequest.of(from/size, size));
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);

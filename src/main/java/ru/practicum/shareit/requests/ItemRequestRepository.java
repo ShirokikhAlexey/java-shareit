@@ -1,5 +1,7 @@
 package ru.practicum.shareit.requests;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.requests.model.ItemRequest;
@@ -14,8 +16,6 @@ public interface ItemRequestRepository extends JpaRepository<ItemRequest, Intege
 
     @Query(value = "select it " +
             "from ItemRequest as it " +
-            "order by it.created_at desc " +
-            "limit ?2 " +
-            "offset ?1 ")
-    List<ItemRequest> getAllRequests(Integer from, Integer size);
+            "order by it.created_at desc ")
+    List<ItemRequest> getAllRequests(Pageable pageable);
 }
