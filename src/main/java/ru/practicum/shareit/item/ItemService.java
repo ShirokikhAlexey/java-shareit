@@ -14,9 +14,9 @@ public interface ItemService {
 
     ItemDto get(Integer itemId, Integer userId) throws NotFoundException;
 
-    List<ItemDto> getAll(Integer itemId);
+    List<ItemDto> getAll(Integer itemId, Integer from, Integer size);
 
-    List<ItemDto> search(String text);
+    List<ItemDto> search(String text, Integer from, Integer size);
 
     CommentDto addComment(CommentDto comment) throws NotFoundException, InvalidUserException;
 

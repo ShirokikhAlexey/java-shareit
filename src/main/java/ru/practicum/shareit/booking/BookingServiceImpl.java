@@ -119,23 +119,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getStatusList(Integer userId, String state) {
+    public List<BookingDto> getStatusList(Integer userId, String state, Integer from, Integer size) {
         List<Booking> bookings;
         switch (state) {
             case "PAST":
-                bookings = bookingRepository.getPast(userId);
+                bookings = bookingRepository.getPast(userId, from, size);
                 break;
             case "CURRENT":
-                bookings = bookingRepository.getCurrent(userId);
+                bookings = bookingRepository.getCurrent(userId, from, size);
                 break;
             case "FUTURE":
-                bookings = bookingRepository.getFuture(userId);
+                bookings = bookingRepository.getFuture(userId, from, size);
                 break;
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getByStatus(userId, Status.valueOf(state));
+                bookings = bookingRepository.getByStatus(userId, Status.valueOf(state), from, size);
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);
@@ -152,23 +152,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getUserItemsBookings(Integer userId, String state) {
+    public List<BookingDto> getUserItemsBookings(Integer userId, String state, Integer from, Integer size) {
         List<Booking> bookings;
         switch (state) {
             case "PAST":
-                bookings = bookingRepository.getOwnerPast(userId);
+                bookings = bookingRepository.getOwnerPast(userId, from, size);
                 break;
             case "CURRENT":
-                bookings = bookingRepository.getOwnerCurrent(userId);
+                bookings = bookingRepository.getOwnerCurrent(userId, from, size);
                 break;
             case "FUTURE":
-                bookings = bookingRepository.getOwnerFuture(userId);
+                bookings = bookingRepository.getOwnerFuture(userId, from, size);
                 break;
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state));
+                bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state), from, size);
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);

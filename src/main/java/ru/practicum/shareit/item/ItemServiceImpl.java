@@ -124,9 +124,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAll(Integer userId) {
+    public List<ItemDto> getAll(Integer userId, Integer from, Integer size) {
         List<ItemDto> result = new ArrayList<>();
-        for (Item item : itemRepository.findByOwner_Id(userId)) {
+        for (Item item : itemRepository.findByOwner_Id(userId, from, size)) {
             ItemDto itemDto = ItemMapper.toDto(item);
 
             BookingDto latestBooking;
@@ -160,12 +160,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> search(String text) {
+    public List<ItemDto> search(String text, Integer from, Integer size) {
         List<ItemDto> result = new ArrayList<>();
         if (text.isEmpty()) {
             return result;
         }
-        for (Item item : itemRepository.search(text)) {
+        for (Item item : itemRepository.search(text, from, size)) {
             result.add(ItemMapper.toDto(item));
         }
         return result;

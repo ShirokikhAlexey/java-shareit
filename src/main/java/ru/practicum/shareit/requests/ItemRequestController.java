@@ -30,7 +30,8 @@ public class ItemRequestController {
     }
 
     @GetMapping("/all")
-    public List<ItemRequestDto> search(@RequestParam Integer from, @RequestParam Integer size) {
+    public List<ItemRequestDto> search(@RequestParam(defaultValue = "0", required = false) Integer from,
+                                       @RequestParam(defaultValue = "10", required = false) Integer size) {
         return itemRequestService.getAll(from, size);
     }
 

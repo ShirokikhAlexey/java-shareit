@@ -13,61 +13,77 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "from Booking as b " +
             "where (b.status = ?2 or ?2 = 'ALL') " +
             "and b.bookedBy.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getByStatus(Integer userId, Status state);
+            "order by b.from desc " +
+            "limit ?4 " +
+            "offset ?3 ")
+    List<Booking> getByStatus(Integer userId, Status state, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.from > now() " +
             "and b.bookedBy.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getFuture(Integer userId);
+            "order by b.from desc " +
+            "limit ?3 " +
+            "offset ?2 ")
+    List<Booking> getFuture(Integer userId, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.to < now() " +
             "and b.bookedBy.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getPast(Integer userId);
+            "order by b.from desc " +
+            "limit ?3 " +
+            "offset ?2 ")
+    List<Booking> getPast(Integer userId, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.from <= now() and b.to >= now() " +
             "and b.bookedBy.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getCurrent(Integer userId);
+            "order by b.from desc " +
+            "limit ?3 " +
+            "offset ?2 ")
+    List<Booking> getCurrent(Integer userId, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
             "where b.from > now() " +
             "and i.owner.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getOwnerFuture(Integer userId);
+            "order by b.from desc " +
+            "limit ?3 " +
+            "offset ?2 ")
+    List<Booking> getOwnerFuture(Integer userId, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
             "where b.to < now() " +
             "and i.owner.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getOwnerPast(Integer userId);
+            "order by b.from desc " +
+            "limit ?3 " +
+            "offset ?2 ")
+    List<Booking> getOwnerPast(Integer userId, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
             "where b.from <= now() and b.to >= now() " +
             "and i.owner.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getOwnerCurrent(Integer userId);
+            "order by b.from desc " +
+            "limit ?3 " +
+            "offset ?2 ")
+    List<Booking> getOwnerCurrent(Integer userId, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
             "where (b.status = ?2 or ?2 = 'ALL') " +
             "and i.owner.id = ?1 " +
-            "order by b.from desc")
-    List<Booking> getUserItemsBookings(Integer userId, Status state);
+            "order by b.from desc " +
+            "limit ?4 " +
+            "offset ?3 ")
+    List<Booking> getUserItemsBookings(Integer userId, Status state, Integer from, Integer size);
 
     @Query(value = "select b " +
             "from Booking as b " +
