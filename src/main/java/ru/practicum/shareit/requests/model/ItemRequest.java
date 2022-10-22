@@ -48,4 +48,18 @@ public class ItemRequest {
         this.status = status;
     }
 
+    public ItemRequest(Integer id, User author, String description, Status status,
+                       LocalDateTime created_at, List<Item> suggestions) {
+        this.author = author;
+        this.description = description;
+        this.status = status;
+        this.id = id;
+        this.created_at = created_at;
+        this.suggestions = suggestions;
+    }
+
+    public ItemRequest() {
+
+    }
+
 }
