@@ -2,6 +2,7 @@ package ru.practicum.shareit.requests;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.ItemRequestDtoMapper;
@@ -13,6 +14,7 @@ import ru.practicum.shareit.user.model.User;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -44,7 +46,11 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public ItemRequestDto get(Integer itemRequestId) {
+    public ItemRequestDto get(Integer itemRequestId, Integer userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new NotFoundException();
+        }
         Optional<ItemRequest> request = itemRequestRepository.findById(itemRequestId);
         if (request.isEmpty()) {
             throw new NotFoundException();
@@ -67,9 +73,15 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public List<ItemRequestDto> getAll(Integer from, Integer size) {
+    public List<ItemRequestDto> getAll(Integer userId, Integer from, Integer size) {
         List<ItemRequestDto> response = new ArrayList<>();
-        List<ItemRequest> userRequests = itemRequestRepository.getAllRequests(PageRequest.of(from/size, size));
+        List<ItemRequest> userRequests;
+        if (userId != null) {
+             userRequests = itemRequestRepository.getAllUsersRequests(userId, PageRequest.of(from/size, size));
+        } else {
+            userRequests = itemRequestRepository.getAllRequests(PageRequest.of(from/size, size));
+        }
+
         for (ItemRequest request : userRequests) {
             response.add(ItemRequestDtoMapper.toDto(request));
         }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
+import javax.validation.ValidationException;
 import java.util.List;
 
 
@@ -40,6 +41,9 @@ public class BookingController {
                                      @RequestHeader("X-Sharer-User-Id") Integer userId,
                                      @RequestParam(defaultValue = "0", required = false) Integer from,
                                      @RequestParam(defaultValue = "10", required = false) Integer size) {
+        if (from < 0 || size < 0) {
+            throw new ValidationException();
+        }
         return bookingService.getStatusList(userId, state, from, size);
     }
 
@@ -48,6 +52,9 @@ public class BookingController {
                                                  @RequestHeader("X-Sharer-User-Id") Integer userId,
                                                  @RequestParam(defaultValue = "0", required = false) Integer from,
                                                  @RequestParam(defaultValue = "10", required = false) Integer size) {
+        if (from < 0 || size < 0) {
+            throw new ValidationException();
+        }
         return bookingService.getUserItemsBookings(userId, state, from, size);
     }
 

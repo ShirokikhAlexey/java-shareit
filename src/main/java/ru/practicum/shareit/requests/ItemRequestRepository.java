@@ -18,4 +18,10 @@ public interface ItemRequestRepository extends JpaRepository<ItemRequest, Intege
             "from ItemRequest as it " +
             "order by it.createdAt desc ")
     List<ItemRequest> getAllRequests(Pageable pageable);
+
+    @Query(value = "select it " +
+            "from ItemRequest as it " +
+            "where it.author.id != ?1 " +
+            "order by it.createdAt desc ")
+    List<ItemRequest> getAllUsersRequests(Integer userId, Pageable pageable);
 }

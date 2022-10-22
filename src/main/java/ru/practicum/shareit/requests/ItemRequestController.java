@@ -26,17 +26,19 @@ public class ItemRequestController {
     }
 
     @GetMapping(value = "/{requestId}")
-    public ItemRequestDto get(@PathVariable int requestId) {
-        return itemRequestService.get(requestId);
+    public ItemRequestDto get(@RequestHeader("X-Sharer-User-Id") Integer userId,
+                              @PathVariable int requestId) {
+        return itemRequestService.get(requestId, userId);
     }
 
     @GetMapping("/all")
-    public List<ItemRequestDto> search(@RequestParam(defaultValue = "0", required = false) Integer from,
+    public List<ItemRequestDto> search(@RequestHeader("X-Sharer-User-Id") Integer userId,
+                                       @RequestParam(defaultValue = "0", required = false) Integer from,
                                        @RequestParam(defaultValue = "10", required = false) Integer size) {
         if (from < 0 || size < 0) {
             throw new ValidationException();
         }
-        return itemRequestService.getAll(from, size);
+        return itemRequestService.getAll(userId, from, size);
     }
 
 
