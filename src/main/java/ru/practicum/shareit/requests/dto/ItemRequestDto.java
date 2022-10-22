@@ -25,6 +25,7 @@ public class ItemRequestDto {
 
     private UserDto author;
 
+    @JsonProperty("items")
     private List<ItemDto> suggestions;
 
     @JsonProperty("status")

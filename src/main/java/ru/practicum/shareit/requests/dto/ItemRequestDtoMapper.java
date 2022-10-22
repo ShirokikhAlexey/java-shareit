@@ -17,7 +17,7 @@ public class ItemRequestDtoMapper {
         if (itemRequest.getSuggestions() != null && !itemRequest.getSuggestions().isEmpty()) {
             for (Item item : itemRequest.getSuggestions()) {
                 if (item != null) {
-                    items.add(ItemMapper.toDto(item));
+                    items.add(ItemMapper.toDto(item, itemRequest.getId()));
                 }
             }
         }
