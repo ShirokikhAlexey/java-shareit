@@ -158,20 +158,20 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings;
         switch (state) {
             case "PAST":
-                bookings = bookingRepository.getOwnerPast(userId, PageRequest.of(from/size, size));
+                bookings = bookingRepository.getOwnerPast(userId, PageRequest.of(from / size, size));
                 break;
             case "CURRENT":
-                bookings = bookingRepository.getOwnerCurrent(userId, PageRequest.of(from/size, size));
+                bookings = bookingRepository.getOwnerCurrent(userId, PageRequest.of(from / size, size));
                 break;
             case "FUTURE":
-                bookings = bookingRepository.getOwnerFuture(userId, PageRequest.of(from/size, size));
+                bookings = bookingRepository.getOwnerFuture(userId, PageRequest.of(from / size, size));
                 break;
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "ALL":
                 bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state),
-                        PageRequest.of(from/size, size));
+                        PageRequest.of(from / size, size));
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);
