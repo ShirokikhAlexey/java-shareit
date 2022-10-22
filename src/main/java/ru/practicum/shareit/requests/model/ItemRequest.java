@@ -37,7 +37,7 @@ public class ItemRequest {
 
     @NonNull
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @ManyToMany()
     @JoinTable(
@@ -47,19 +47,20 @@ public class ItemRequest {
     )
     private List<Item> suggestions;
 
-    public ItemRequest(User author, String description, Status status) {
+    public ItemRequest(User author, String description, Status status, LocalDateTime createdAt) {
         this.author = author;
         this.description = description;
         this.status = status;
+        this.createdAt = createdAt;
     }
 
     public ItemRequest(Integer id, User author, String description, Status status,
-                       LocalDateTime created_at, List<Item> suggestions) {
+                       LocalDateTime createdAt, List<Item> suggestions) {
         this.author = author;
         this.description = description;
         this.status = status;
         this.id = id;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.suggestions = suggestions;
     }
 

@@ -7,6 +7,7 @@ import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.ItemRequestDtoMapper;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
@@ -30,9 +31,10 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         if (author.isEmpty()) {
             throw new NotFoundException();
         }
-        item.setAuthor(author.get());
         validate(item);
-        return ItemRequestDtoMapper.toDto(itemRequestRepository.save(ItemRequestDtoMapper.fromDto(item)));
+        ItemRequest request = itemRequestRepository.save(ItemRequestDtoMapper.fromDto(item, author.get()));
+        System.out.println(ItemRequestDtoMapper.toDto(request));
+        return ItemRequestDtoMapper.toDto(request);
     }
 
     private void validate(ItemRequestDto requestDto) {
@@ -53,12 +55,13 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> getUserAll(Integer userId) {
         List<ItemRequestDto> response = new ArrayList<>();
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new NotFoundException();
+        }
         List<ItemRequest> userRequests = itemRequestRepository.getUserRequests(userId);
         for (ItemRequest request : userRequests) {
             response.add(ItemRequestDtoMapper.toDto(request));
-        }
-        if (response.isEmpty()) {
-            throw new NotFoundException();
         }
         return response;
     }

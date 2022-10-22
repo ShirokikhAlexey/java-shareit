@@ -60,7 +60,7 @@ public class ItemServiceImpl implements ItemService {
         if (item.getRequestId() != null) {
             addRequestSuggestion(item.getRequestId(), saved);
         }
-        return ItemMapper.toDto(saved);
+        return ItemMapper.toDto(saved, item.getRequestId());
     }
 
     private void addRequestSuggestion(Integer requestId, Item suggestion) {
