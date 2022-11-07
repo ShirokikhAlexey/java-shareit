@@ -87,4 +87,19 @@ public class BookingDto {
         this.booker = booker;
         this.item = item;
     }
+
+    public BookingDto(Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
+                      String review) {
+        this.bookerId = userId;
+        this.itemId = itemId;
+        this.from = from;
+        this.to = to;
+        this.status = status;
+        this.review = review;
+    }
+
+    public BookingDto(Status status, String review) {
+        this.status = status;
+        this.review = review;
+    }
 }

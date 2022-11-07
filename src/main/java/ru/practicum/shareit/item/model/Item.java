@@ -58,4 +58,12 @@ public class Item {
         this.description = description;
         this.available = available;
     }
+
+    public Item(Integer id, User owner, String name, String description, Boolean available) {
+        this.id = id;
+        this.owner = owner;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
 }
