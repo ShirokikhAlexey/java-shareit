@@ -12,10 +12,13 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.util.Status;
+import ru.practicum.shareit.exception.InvalidItemException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
@@ -50,16 +53,16 @@ public class BookingServiceTests {
     public void testCreateInvalidOwner(){
         Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(new User(1, "name", "email")));
         Mockito.when(itemRepository.findById(1)).thenReturn(Optional.of(new Item(1,
-                new User("test", "email"), "test", "test", true)));
+                new User(2, "test", "email"), "test", "test", true)));
         BookingDto bookingDto = new BookingDto(1, 1, 1, LocalDateTime.now(), LocalDateTime.now(),
                 Status.WAITING, "Test");
-        Assertions.assertThrows(NotFoundException.class, () -> {bookingService.create(bookingDto);});
+        Assertions.assertThrows(ValidationException.class, () -> {bookingService.create(bookingDto);});
     }
 
     @Test
     public void testCreateValidation(){
         User user = new User(1, "name", "email");
-        Item item = new Item(1, user, "test", "test", true);
+        Item item = new Item(1, new User(2,"test", "email"), "test", "test", true);
         Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Mockito.when(itemRepository.findById(1)).thenReturn(Optional.of(item));
 
@@ -78,21 +81,25 @@ public class BookingServiceTests {
         item.setAvailable(false);
         BookingDto bookingDtoUnavailable = new BookingDto(1, 1, 1, LocalDateTime.now().plusDays(2),
                 LocalDateTime.now().plusDays(4), Status.WAITING, "Test");
-        Assertions.assertThrows(ValidationException.class, () -> {bookingService.create(bookingDtoUnavailable);});
+        Assertions.assertThrows(InvalidItemException.class, () -> {bookingService.create(bookingDtoUnavailable);});
     }
 
     @Test
     public void testCreateSuccess(){
         User user = new User(1, "name", "email");
-        Item item = new Item(1, user, "test", "test", true);
+        Item item = new Item(1, new User(2,"test", "email"), "test", "test", true);
         Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Mockito.when(itemRepository.findById(1)).thenReturn(Optional.of(item));
 
         BookingDto bookingDto = new BookingDto(1, 1, LocalDateTime.now().plusDays(1),
                 LocalDateTime.now().plusDays(3), Status.WAITING, "Test");
         Booking booking = BookingMapper.fromDto(user, item, bookingDto);
-        Mockito.when(bookingRepository.save(booking)).thenReturn(booking);
+        Mockito.when(bookingRepository.save(Mockito.any())).thenReturn(booking);
         BookingDto created = bookingService.create(bookingDto);
+
+        bookingDto.setBooker(UserMapper.toDto(user));
+        bookingDto.setItem(ItemMapper.toDto(item));
+
         Assertions.assertEquals(bookingDto, created);
     }
 
