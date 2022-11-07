@@ -121,6 +121,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getStatusList(Integer userId, String state, Integer from, Integer size) {
+        if (from <= 0) {
+            throw new ValidationException();
+        }
         List<Booking> bookings;
         switch (state) {
             case "PAST":
@@ -155,6 +158,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getUserItemsBookings(Integer userId, String state, Integer from, Integer size) {
+        if (from <= 0) {
+            throw new ValidationException();
+        }
         List<Booking> bookings;
         switch (state) {
             case "PAST":
