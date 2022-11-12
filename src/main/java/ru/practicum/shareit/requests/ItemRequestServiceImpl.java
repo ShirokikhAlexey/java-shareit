@@ -36,7 +36,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     private void validate(ItemRequestDto requestDto) {
-        if (requestDto.getDescription() == null) {
+        if (requestDto.getDescription() == null || requestDto.getDescription().isBlank()) {
             throw new ValidationException();
         }
     }

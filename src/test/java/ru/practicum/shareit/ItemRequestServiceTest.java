@@ -13,6 +13,7 @@ import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.ItemRequestDtoMapper;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
@@ -48,7 +49,10 @@ public class ItemRequestServiceTest {
         Mockito.when(itemRequestRepository.save(Mockito.any())).thenReturn(itemRequest);
 
         ItemRequestDto created = itemRequestService.create(itemRequestDto, 1);
-        Assertions.assertEquals(itemRequestDto, created);
+        itemRequestDto.setAuthor(UserMapper.toDto(user));
+        Assertions.assertEquals(itemRequestDto.getDescription(), created.getDescription());
+        Assertions.assertEquals(itemRequestDto.getAuthor(), created.getAuthor());
+        Assertions.assertEquals(itemRequestDto.getStatus(), created.getStatus());
     }
 
 }
