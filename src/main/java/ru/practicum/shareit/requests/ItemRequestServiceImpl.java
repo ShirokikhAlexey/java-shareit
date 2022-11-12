@@ -32,7 +32,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         }
         validate(item);
         ItemRequest request = itemRequestRepository.save(ItemRequestDtoMapper.fromDto(item, author.get()));
-        System.out.println(ItemRequestDtoMapper.toDto(request));
         return ItemRequestDtoMapper.toDto(request);
     }
 
