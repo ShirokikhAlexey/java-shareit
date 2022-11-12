@@ -57,6 +57,7 @@ public class ItemServiceImpl implements ItemService {
         }
         validate(item);
         Item saved = itemRepository.save(ItemMapper.fromDto(user.get(), item));
+        System.out.println(saved);
         if (item.getRequestId() != null) {
             addRequestSuggestion(item.getRequestId(), saved);
         }
@@ -70,7 +71,8 @@ public class ItemServiceImpl implements ItemService {
         }
         ItemRequest requestObject = request.get();
         if (requestObject.getSuggestions() == null) {
-            requestObject.setSuggestions(List.of(suggestion));
+            requestObject.setSuggestions(new ArrayList<>());
+            requestObject.getSuggestions().add(suggestion);
         } else {
             requestObject.getSuggestions().add(suggestion);
         }
@@ -174,7 +176,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addComment(CommentDto commentDto) throws NotFoundException, InvalidUserException {
-        if (commentDto.getReview().isEmpty()) {
+        if (commentDto.getReview().isBlank() || commentDto.getReview() == null) {
             throw new ValidationException();
         }
 
