@@ -44,7 +44,7 @@ public class UserServiceTests {
 
     @Test
     public void testCreateSuccess() {
-        Mockito.when(userRepository.save(Mockito.any())).thenReturn(new User(1,"test", "test@test.test"));
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(new User(1, "test", "test@test.test"));
         UserDto userDto = new UserDto(1, "test", "test@test.test", new ArrayList<>());
         UserDto created = userService.create(userDto);
         Assertions.assertEquals(userDto, created);
