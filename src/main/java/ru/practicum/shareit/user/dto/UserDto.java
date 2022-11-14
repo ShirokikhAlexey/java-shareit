@@ -29,4 +29,9 @@ public class UserDto {
         this.id = id;
     }
 
+    public UserDto(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
 }

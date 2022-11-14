@@ -26,7 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto user) throws InvalidUserException, InvalidUserParameters {
-        if (user.getEmail() == null || user.getName() == null) {
+        if (user.getEmail() == null || user.getName() == null || user.getName().isBlank() ||
+                user.getEmail().isBlank()) {
             throw new InvalidUserParameters();
         }
         validate(user);
