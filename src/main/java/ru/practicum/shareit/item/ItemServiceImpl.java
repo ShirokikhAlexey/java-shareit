@@ -7,7 +7,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.InvalidItemException;
-import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentMapper;
@@ -80,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException, InvalidUserException {
+    public ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException {
         Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) {
             throw new NotFoundException();
@@ -175,7 +174,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public CommentDto addComment(CommentDto commentDto) throws NotFoundException, InvalidUserException {
+    public CommentDto addComment(CommentDto commentDto) throws NotFoundException {
         if (commentDto.getReview().isBlank() || commentDto.getReview() == null) {
             throw new ValidationException();
         }

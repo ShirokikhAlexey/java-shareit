@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -10,7 +9,7 @@ import java.util.List;
 public interface ItemService {
     ItemDto create(ItemDto item, Integer userId) throws NotFoundException;
 
-    ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException, InvalidUserException;
+    ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException;
 
     ItemDto get(Integer itemId, Integer userId) throws NotFoundException;
 
@@ -18,7 +17,7 @@ public interface ItemService {
 
     List<ItemDto> search(String text, Integer from, Integer size);
 
-    CommentDto addComment(CommentDto comment) throws NotFoundException, InvalidUserException;
+    CommentDto addComment(CommentDto comment) throws NotFoundException;
 
     List<CommentDto> getItemComments(Integer itemId);
 

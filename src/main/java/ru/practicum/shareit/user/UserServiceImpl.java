@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.InvalidUserParameters;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -25,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDto create(UserDto user) throws InvalidUserException, InvalidUserParameters {
+    public UserDto create(UserDto user) throws InvalidUserParameters {
         if (user.getEmail() == null || user.getName() == null || user.getName().isBlank() ||
                 user.getEmail().isBlank()) {
             throw new InvalidUserParameters();
@@ -36,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(UserDto userDto, Integer userId) throws NotFoundException, InvalidUserException {
+    public UserDto update(UserDto userDto, Integer userId) throws NotFoundException {
         Optional<User> user = repository.findById(userId);
         if (user.isEmpty()) {
             throw new NotFoundException();
@@ -70,13 +69,13 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    private void validate(UserDto user) throws ValidationException, InvalidUserException {
+    private void validate(UserDto user) throws ValidationException {
         if (user.getEmail() != null) {
             validateEmail(user);
         }
     }
 
-    private void validateEmail(UserDto user) throws ValidationException, InvalidUserException {
+    private void validateEmail(UserDto user) throws ValidationException {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         if (!Pattern.compile(regexPattern).matcher(user.getEmail()).matches()) {

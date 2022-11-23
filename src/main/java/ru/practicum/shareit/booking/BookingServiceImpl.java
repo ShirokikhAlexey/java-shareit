@@ -7,7 +7,6 @@ import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.util.Status;
 import ru.practicum.shareit.exception.InvalidItemException;
-import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
@@ -57,7 +56,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto update(Integer bookingId, BookingDto bookingDto) throws NotFoundException, InvalidUserException {
+    public BookingDto update(Integer bookingId, BookingDto bookingDto) throws NotFoundException {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
             throw new NotFoundException();
@@ -78,8 +77,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto changeStatus(int bookingId, boolean newStatus, int userId) throws NotFoundException,
-            InvalidUserException {
+    public BookingDto changeStatus(int bookingId, boolean newStatus, int userId) throws NotFoundException {
         Status newStatusValue;
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
@@ -107,7 +105,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto get(Integer bookingId, Integer userId) throws NotFoundException, InvalidUserException {
+    public BookingDto get(Integer bookingId, Integer userId) throws NotFoundException {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
             throw new NotFoundException();
