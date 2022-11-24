@@ -1,16 +1,15 @@
 package ru.practicum.shareit;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.BookingController;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -22,23 +21,16 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(BookingController.class)
+@WebMvcTest(value = BookingController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class BookingControllerTest {
-    private MockMvc mockMvc;
-
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private MockMvc mvc;
 
     @MockBean
-    private BookingService bookingService;
-
-    @Before
-    public void setUp() {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
-    }
+    BookingService bookingService;
 
 
     @Test
@@ -47,7 +39,7 @@ public class BookingControllerTest {
                 Status.CURRENT, "test");
         when(bookingService.create(Mockito.any())).thenReturn(bookingDto);
 
-        mockMvc.perform(post("/bookings")
+        mvc.perform(post("/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"bookerId\": 1, \"itemId\": 1, \"from\": \"2022-01-01 00:00:00\",\"to\": \"2022-02-01 00:00:00\", \"status\": \"CURRENT\", \"review\": \"test\"}")
                         .header("X-Sharer-User-Id", 1)
@@ -63,7 +55,7 @@ public class BookingControllerTest {
                 Status.APPROVED, "test");
         when(bookingService.changeStatus(1, true, 1)).thenReturn(bookingDto);
 
-        mockMvc.perform(patch("/bookings/{bookingId}", 1)
+        mvc.perform(patch("/bookings/{bookingId}", 1)
                         .param("approved", String.valueOf(true))
                         .header("X-Sharer-User-Id", 1)
                         .accept(MediaType.APPLICATION_JSON))
@@ -77,7 +69,7 @@ public class BookingControllerTest {
                 Status.APPROVED, "test");
         when(bookingService.get(1, 1)).thenReturn(bookingDto);
 
-        mockMvc.perform(get("/bookings/{bookingId}", 1)
+        mvc.perform(get("/bookings/{bookingId}", 1)
                         .header("X-Sharer-User-Id", 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
