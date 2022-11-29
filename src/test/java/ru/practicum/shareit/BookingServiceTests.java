@@ -63,6 +63,18 @@ public class BookingServiceTests {
     }
 
     @Test
+    public void testCreateInvalidOwnerAnother() {
+        User user = new User(1, "name", "email");
+        Item item = new Item(1, user, "test", "test", true);
+        Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        Mockito.when(itemRepository.findById(1)).thenReturn(Optional.of(item));
+
+        BookingDto bookingDto = new BookingDto(1, 2, 1, LocalDateTime.now(),
+                LocalDateTime.now(), Status.WAITING, "Test");
+        Assertions.assertThrows(NotFoundException.class, () -> bookingService.create(bookingDto));
+    }
+
+    @Test
     public void testCreateValidation() {
         User user = new User(1, "name", "email");
         Item item = new Item(1, new User(2, "test", "email"), "test", "test", true);
@@ -127,6 +139,22 @@ public class BookingServiceTests {
         booking.setStatus(Status.APPROVED);
         booking.setReview("Test updated");
         Assertions.assertEquals(BookingMapper.toDto(booking), bookingService.update(1, updated));
+    }
+
+    @Test
+    public void testGetByIdNotFound() {
+        Mockito.when(bookingRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        Assertions.assertThrows(NotFoundException.class, () -> bookingService.get(1));
+    }
+
+    @Test
+    public void testGetByIdSuccess() {
+        User user = new User(1, "name", "email");
+        Item item = new Item(1, user, "test", "test", true);
+        Booking booking = new Booking(1, item, user, LocalDateTime.now(), LocalDateTime.now(), Status.WAITING,
+                "Test");
+        Mockito.when(bookingRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(booking));
+        Assertions.assertEquals(BookingMapper.toDto(booking), bookingService.get(1));
     }
 
     @Test

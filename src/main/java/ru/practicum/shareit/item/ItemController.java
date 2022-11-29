@@ -18,9 +18,7 @@ public class ItemController {
 
     @PostMapping()
     public ItemDto create(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        ItemDto newItem = itemService.create(item, userId);
-        log.info("Добавлена новая вещь {}", newItem.toString());
-        return newItem;
+        return itemService.create(item, userId);
     }
 
     @PatchMapping(value = "/{itemId}")
