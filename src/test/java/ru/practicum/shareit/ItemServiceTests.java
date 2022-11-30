@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.InvalidItemException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -93,6 +94,40 @@ public class ItemServiceTests {
     }
 
     @Test
+    public void testCreateSuccessAnother() {
+        User user = new User(1,"name", "email");
+        Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        Mockito.when(itemRequestRepository.findById(Mockito.anyInt()))
+                .thenReturn(
+                        Optional.of(new ItemRequest(1, new User(2, "test", "test"),
+                                "test", Status.OPEN, LocalDateTime.now(), new ArrayList<>())));
+
+        ItemDto itemDto = new ItemDto("Test", "test", true, null);
+
+        Item item = ItemMapper.fromDto(user, itemDto);
+
+        Mockito.when(itemRepository.save(Mockito.any())).thenReturn(item);
+        Assertions.assertEquals(itemDto, itemService.create(itemDto, 1));
+    }
+
+    @Test
+    public void testCreateSuccessNoSuggestions() {
+        User user = new User(1,"name", "email");
+        Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        Mockito.when(itemRequestRepository.findById(Mockito.anyInt()))
+                .thenReturn(
+                        Optional.of(new ItemRequest(1, new User(2, "test", "test"),
+                                "test", Status.OPEN, LocalDateTime.now(), null)));
+
+        ItemDto itemDto = new ItemDto("Test", "test", true, 1);
+
+        Item item = ItemMapper.fromDto(user, itemDto);
+
+        Mockito.when(itemRepository.save(Mockito.any())).thenReturn(item);
+        Assertions.assertEquals(itemDto, itemService.create(itemDto, 1));
+    }
+
+    @Test
     public void testUpdateInvalidItem() {
         Mockito.when(itemRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
@@ -156,5 +191,95 @@ public class ItemServiceTests {
 
 
         Assertions.assertEquals(commentDto.getReview(), created.getReview());
+    }
+
+    @Test
+    public void testGetNoBookings() {
+        User user = new User(1, "test", "test");
+        Item item = new Item(1, user, "test", "test", true);
+
+        Comment comment = new Comment(user, item, "test");
+
+        Mockito.when(itemRepository.findById(2)).thenReturn(Optional.empty());
+        Assertions.assertThrows(NotFoundException.class, () -> itemService.get(2, 1));
+
+        Mockito.when(itemRepository.findById(1)).thenReturn(Optional.of(item));
+        Mockito.when(bookingRepository.getItemLatestBooking(Mockito.anyInt())).thenReturn(new ArrayList<>());
+        Mockito.when(bookingRepository.getItemNearestBooking(Mockito.anyInt())).thenReturn(new ArrayList<>());
+        Mockito.when(commentRepository.findByItem_Id(Mockito.anyInt())).thenReturn(List.of(comment));
+
+        ItemDto itemDto = ItemMapper.toDto(item);
+        itemDto.setComments(List.of(CommentMapper.toDto(comment)));
+        itemDto.setLastBooking(null);
+        itemDto.setNextBooking(null);
+
+        Assertions.assertEquals(itemDto, itemService.get(1, 1));
+    }
+
+    @Test
+    public void testGetBookings() {
+        User user = new User(1, "test", "test");
+        Item item = new Item(1, user, "test", "test", true);
+        Booking latest = new Booking(1, item, user, LocalDateTime.now(), LocalDateTime.now(), ru.practicum.shareit.booking.util.Status.WAITING, "test");
+        Booking nearest = new Booking(2, item, user, LocalDateTime.now(), LocalDateTime.now(), ru.practicum.shareit.booking.util.Status.WAITING, "test");
+
+        Comment comment = new Comment(user, item, "test");
+
+        Mockito.when(itemRepository.findById(2)).thenReturn(Optional.empty());
+        Assertions.assertThrows(NotFoundException.class, () -> itemService.get(2, 1));
+
+        Mockito.when(itemRepository.findById(1)).thenReturn(Optional.of(item));
+        Mockito.when(bookingRepository.getItemLatestBooking(Mockito.anyInt())).thenReturn(List.of(latest));
+        Mockito.when(bookingRepository.getItemNearestBooking(Mockito.anyInt())).thenReturn(List.of(nearest));
+        Mockito.when(commentRepository.findByItem_Id(Mockito.anyInt())).thenReturn(List.of(comment));
+
+        ItemDto itemDto = ItemMapper.toDto(item);
+        itemDto.setComments(List.of(CommentMapper.toDto(comment)));
+        itemDto.setLastBooking(BookingMapper.toDto(latest));
+        itemDto.setNextBooking(BookingMapper.toDto(nearest));
+
+        Assertions.assertEquals(itemDto, itemService.get(1, 1));
+    }
+
+    @Test
+    public void testGetAllNoBookings() {
+        User user = new User(1, "test", "test");
+        Item item = new Item(1, user, "test", "test", true);
+
+        Comment comment = new Comment(user, item, "test");
+
+        Mockito.when(itemRepository.findByOwner_Id(Mockito.anyInt(), Mockito.any())).thenReturn(List.of(item));
+        Mockito.when(bookingRepository.getItemLatestBooking(Mockito.anyInt())).thenReturn(new ArrayList<>());
+        Mockito.when(bookingRepository.getItemNearestBooking(Mockito.anyInt())).thenReturn(new ArrayList<>());
+        Mockito.when(commentRepository.findByItem_Id(Mockito.anyInt())).thenReturn(List.of(comment));
+
+        ItemDto itemDto = ItemMapper.toDto(item);
+        itemDto.setComments(List.of(CommentMapper.toDto(comment)));
+        itemDto.setLastBooking(null);
+        itemDto.setNextBooking(null);
+
+        Assertions.assertEquals(List.of(itemDto), itemService.getAll(1, 1, 1));
+    }
+
+    @Test
+    public void testGetAllBookings() {
+        User user = new User(1, "test", "test");
+        Item item = new Item(1, user, "test", "test", true);
+        Booking latest = new Booking(1, item, user, LocalDateTime.now(), LocalDateTime.now(), ru.practicum.shareit.booking.util.Status.WAITING, "test");
+        Booking nearest = new Booking(2, item, user, LocalDateTime.now(), LocalDateTime.now(), ru.practicum.shareit.booking.util.Status.WAITING, "test");
+
+        Comment comment = new Comment(user, item, "test");
+
+        Mockito.when(itemRepository.findByOwner_Id(Mockito.anyInt(), Mockito.any())).thenReturn(List.of(item));
+        Mockito.when(bookingRepository.getItemLatestBooking(Mockito.anyInt())).thenReturn(List.of(latest));
+        Mockito.when(bookingRepository.getItemNearestBooking(Mockito.anyInt())).thenReturn(List.of(nearest));
+        Mockito.when(commentRepository.findByItem_Id(Mockito.anyInt())).thenReturn(List.of(comment));
+
+        ItemDto itemDto = ItemMapper.toDto(item);
+        itemDto.setComments(List.of(CommentMapper.toDto(comment)));
+        itemDto.setLastBooking(BookingMapper.toDto(latest));
+        itemDto.setNextBooking(BookingMapper.toDto(nearest));
+
+        Assertions.assertEquals(List.of(itemDto), itemService.getAll(1, 1, 1));
     }
 }
