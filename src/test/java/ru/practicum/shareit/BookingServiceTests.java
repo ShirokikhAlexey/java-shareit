@@ -69,7 +69,7 @@ public class BookingServiceTests {
         Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Mockito.when(itemRepository.findById(1)).thenReturn(Optional.of(item));
 
-        BookingDto bookingDto = new BookingDto(1, 2, 1, LocalDateTime.now(),
+        BookingDto bookingDto = new BookingDto(1, 1, 1, LocalDateTime.now(),
                 LocalDateTime.now(), Status.WAITING, "Test");
         Assertions.assertThrows(NotFoundException.class, () -> bookingService.create(bookingDto));
     }
@@ -159,6 +159,7 @@ public class BookingServiceTests {
 
     @Test
     public void testGetStatusListNotFound() {
+        Assertions.assertThrows(ValidationException.class, () -> bookingService.getStatusList(1, "ALL", -1, 1));
         Assertions.assertThrows(NotFoundException.class, () -> bookingService.getStatusList(1, "ALL", 1, 1));
     }
 
@@ -308,5 +309,44 @@ public class BookingServiceTests {
     public void testGetUserItemsBookingsInvalid() {
         Assertions.assertThrows(ValidationException.class, () -> bookingService.getUserItemsBookings(1, "PAST", 0, 1));
         Assertions.assertThrows(ValidationException.class, () -> bookingService.getUserItemsBookings(1, "TEST", 1, 1));
+    }
+
+    @Test
+    public void testGetBooking() {
+        User user = new User(1, "name", "email");
+        Item item = new Item(1, new User(2, "test", "email"), "test", "test",
+                true);
+        Booking booking = new Booking(1, item, user, LocalDateTime.now(), LocalDateTime.now(), Status.FUTURE,
+                "Test");
+
+        Mockito.when(bookingRepository.findById(2)).thenReturn(Optional.empty());
+        Mockito.when(bookingRepository.findById(1)).thenReturn(Optional.of(booking));
+        Assertions.assertThrows(NotFoundException.class, () -> bookingService.get(2, 1));
+        Assertions.assertThrows(NotFoundException.class, () -> bookingService.get(1, 4));
+
+        Assertions.assertEquals(BookingMapper.toDto(booking), bookingService.get(1,1));
+    }
+
+    @Test
+    public void testChangeStatus() {
+        User user = new User(1, "name", "email");
+        Item item = new Item(1, new User(2, "test", "email"), "test", "test",
+                true);
+        Booking booking = new Booking(1, item, user, LocalDateTime.now(), LocalDateTime.now(), Status.APPROVED,
+                "Test");
+
+        Mockito.when(bookingRepository.findById(2)).thenReturn(Optional.empty());
+        Mockito.when(bookingRepository.findById(1)).thenReturn(Optional.of(booking));
+
+        Assertions.assertThrows(NotFoundException.class, () -> bookingService.changeStatus(2, false, 1));
+        Assertions.assertThrows(ValidationException.class, () -> bookingService.changeStatus(1, false, 1));
+
+        booking.setStatus(Status.WAITING);
+        Assertions.assertThrows(NotFoundException.class, () -> bookingService.changeStatus(1, false, 1));
+
+        Assertions.assertEquals(Status.APPROVED, bookingService.changeStatus(1,true, 2).getStatus());
+
+        booking.setStatus(Status.WAITING);
+        Assertions.assertEquals(Status.REJECTED, bookingService.changeStatus(1,false, 2).getStatus());
     }
 }
