@@ -282,4 +282,13 @@ public class ItemServiceTests {
 
         Assertions.assertEquals(List.of(itemDto), itemService.getAll(1, 1, 1));
     }
+
+    @Test
+    public void searchTest() {
+        Assertions.assertEquals(itemService.search("", 1, 1), new ArrayList<>());
+        User user = new User(1, "test", "test");
+        Item item = new Item(1, user, "test", "test", true);
+        Mockito.when(itemRepository.search(Mockito.anyString(), Mockito.any())).thenReturn(List.of(item));
+        Assertions.assertEquals(List.of(ItemMapper.toDto(item)), itemService.search("test", 1, 1));
+    }
 }
