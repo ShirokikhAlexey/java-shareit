@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-public class BookingServiceTests {
+public class BookingServiceTest {
     UserRepository userRepository = Mockito.mock(UserRepository.class);
     ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
     BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);

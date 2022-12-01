@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-public class UserServiceTests {
+public class UserServiceTest {
     UserRepository userRepository = Mockito.mock(UserRepository.class);
     UserService userService = new UserServiceImpl(userRepository);
 
