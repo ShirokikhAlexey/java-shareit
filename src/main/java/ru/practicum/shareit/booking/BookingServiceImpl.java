@@ -195,6 +195,10 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException();
         }
 
+        if (booking.getFrom().isBefore(LocalDateTime.now())) {
+            throw new ValidationException();
+        }
+
         if (booking.getTo().isBefore(booking.getFrom())) {
             throw new ValidationException();
         }

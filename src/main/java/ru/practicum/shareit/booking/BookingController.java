@@ -37,7 +37,7 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getState(@RequestParam(defaultValue = "ALL", required = false) String state,
                                      @RequestHeader("X-Sharer-User-Id") Integer userId,
-                                     @RequestParam(defaultValue = "0", required = false) Integer from,
+                                     @RequestParam(defaultValue = "1", required = false) Integer from,
                                      @RequestParam(defaultValue = "10", required = false) Integer size) {
         if (from < 0 || size < 0) {
             throw new ValidationException();
@@ -48,7 +48,7 @@ public class BookingController {
     @GetMapping(value = "/owner")
     public List<BookingDto> getUserItemsBookings(@RequestParam(defaultValue = "ALL", required = false) String state,
                                                  @RequestHeader("X-Sharer-User-Id") Integer userId,
-                                                 @RequestParam(defaultValue = "0", required = false) Integer from,
+                                                 @RequestParam(defaultValue = "1", required = false) Integer from,
                                                  @RequestParam(defaultValue = "10", required = false) Integer size) {
         if (from < 0 || size < 0) {
             throw new ValidationException();
