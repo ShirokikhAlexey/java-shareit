@@ -14,10 +14,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 public class ItemRequestDto {
-    @JsonProperty("id")
     private Integer id;
-
-    @JsonProperty("description")
     private String description;
 
     private UserDto author;
@@ -25,7 +22,6 @@ public class ItemRequestDto {
     @JsonProperty("items")
     private List<ItemDto> suggestions;
 
-    @JsonProperty("status")
     private Status status = Status.OPEN;
 
     @JsonProperty("created")

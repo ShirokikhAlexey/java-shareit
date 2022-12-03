@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Data
 @RequiredArgsConstructor
 public class CommentDto {
-    @JsonProperty("id")
     private Integer id;
 
     @JsonProperty("user_id")
@@ -21,10 +20,7 @@ public class CommentDto {
     @JsonProperty("text")
     private String review;
 
-    @JsonProperty("authorName")
     private String authorName;
-
-    @JsonProperty("created")
     private LocalDateTime created;
 
     public CommentDto(Integer userId, Integer itemId, String text) {

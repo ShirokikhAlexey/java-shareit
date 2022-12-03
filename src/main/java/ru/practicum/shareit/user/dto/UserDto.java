@@ -2,7 +2,6 @@ package ru.practicum.shareit.user.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import ru.practicum.shareit.item.model.Item;
 
@@ -10,13 +9,8 @@ import java.util.List;
 
 @Data
 public class UserDto {
-    @JsonProperty("id")
     private Integer id;
-
-    @JsonProperty("name")
     private String name;
-
-    @JsonProperty("email")
     private String email;
 
     @JsonIgnore

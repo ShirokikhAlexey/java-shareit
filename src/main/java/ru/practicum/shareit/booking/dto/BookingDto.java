@@ -13,13 +13,8 @@ import java.time.LocalDateTime;
 @Data
 @RequiredArgsConstructor
 public class BookingDto {
-    @JsonProperty("id")
     private Integer id;
-
-    @JsonProperty("bookerId")
     private Integer bookerId;
-
-    @JsonProperty("itemId")
     private Integer itemId;
 
     @JsonProperty("start")
@@ -28,16 +23,9 @@ public class BookingDto {
     @JsonProperty("end")
     private LocalDateTime to;
 
-    @JsonProperty("status")
     private Status status = Status.WAITING;
-
-    @JsonProperty("review")
     private String review;
-
-    @JsonProperty("booker")
     private UserDto booker;
-
-    @JsonProperty("item")
     private ItemDto item;
 
     public BookingDto(Integer id, Integer userId, Integer itemId, LocalDateTime from, LocalDateTime to, Status status,
