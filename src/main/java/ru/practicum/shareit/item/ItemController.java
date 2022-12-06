@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import javax.validation.ValidationException;
 import java.util.List;
 
 @Slf4j
@@ -17,9 +18,7 @@ public class ItemController {
 
     @PostMapping()
     public ItemDto create(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        ItemDto newItem = itemService.create(item, userId);
-        log.info("Добавлена новая вещь {}", newItem.toString());
-        return newItem;
+        return itemService.create(item, userId);
     }
 
     @PatchMapping(value = "/{itemId}")
@@ -35,13 +34,23 @@ public class ItemController {
     }
 
     @GetMapping()
-    public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Integer userId) {
-        return itemService.getAll(userId);
+    public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Integer userId,
+                                @RequestParam(defaultValue = "0", required = false) Integer from,
+                                @RequestParam(defaultValue = "10", required = false) Integer size) {
+        if (from < 0 || size < 0) {
+            throw new ValidationException();
+        }
+        return itemService.getAll(userId, from, size);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam String text) {
-        return itemService.search(text);
+    public List<ItemDto> search(@RequestParam String text,
+                                @RequestParam(defaultValue = "0", required = false) Integer from,
+                                @RequestParam(defaultValue = "10", required = false) Integer size) {
+        if (from < 0 || size < 0) {
+            throw new ValidationException();
+        }
+        return itemService.search(text, from, size);
     }
 
     @PostMapping(value = "/{itemId}/comment")

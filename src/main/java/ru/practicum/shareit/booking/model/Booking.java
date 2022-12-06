@@ -66,6 +66,17 @@ public class Booking {
         this.review = review;
     }
 
+    public Booking(Integer id, Item item, User bookedBy, LocalDateTime from, LocalDateTime to, Status status,
+                   String review) {
+        this.id = id;
+        this.bookedBy = bookedBy;
+        this.from = from;
+        this.to = to;
+        this.item = item;
+        this.status = status;
+        this.review = review;
+    }
+
     public Booking() {
 
     }

@@ -1,12 +1,12 @@
 package ru.practicum.shareit.booking;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.util.Status;
 import ru.practicum.shareit.exception.InvalidItemException;
-import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
@@ -56,7 +56,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto update(Integer bookingId, BookingDto bookingDto) throws NotFoundException, InvalidUserException {
+    public BookingDto update(Integer bookingId, BookingDto bookingDto) throws NotFoundException {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
             throw new NotFoundException();
@@ -77,8 +77,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto changeStatus(int bookingId, boolean newStatus, int userId) throws NotFoundException,
-            InvalidUserException {
+    public BookingDto changeStatus(int bookingId, boolean newStatus, int userId) throws NotFoundException {
         Status newStatusValue;
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
@@ -106,7 +105,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto get(Integer bookingId, Integer userId) throws NotFoundException, InvalidUserException {
+    public BookingDto get(Integer bookingId, Integer userId) throws NotFoundException {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
             throw new NotFoundException();
@@ -119,23 +118,27 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getStatusList(Integer userId, String state) {
+    public List<BookingDto> getStatusList(Integer userId, String state, Integer from, Integer size) {
+        if (from <= 0) {
+            throw new ValidationException();
+        }
         List<Booking> bookings;
         switch (state) {
             case "PAST":
-                bookings = bookingRepository.getPast(userId);
+                bookings = bookingRepository.getPast(userId, PageRequest.of(from / size, size));
                 break;
             case "CURRENT":
-                bookings = bookingRepository.getCurrent(userId);
+                bookings = bookingRepository.getCurrent(userId, PageRequest.of(from / size, size));
                 break;
             case "FUTURE":
-                bookings = bookingRepository.getFuture(userId);
+                bookings = bookingRepository.getFuture(userId, PageRequest.of(from / size, size));
                 break;
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getByStatus(userId, Status.valueOf(state));
+                bookings = bookingRepository.getByStatus(userId, Status.valueOf(state),
+                        PageRequest.of(from / size, size));
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);
@@ -152,23 +155,27 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getUserItemsBookings(Integer userId, String state) {
+    public List<BookingDto> getUserItemsBookings(Integer userId, String state, Integer from, Integer size) {
+        if (from <= 0) {
+            throw new ValidationException();
+        }
         List<Booking> bookings;
         switch (state) {
             case "PAST":
-                bookings = bookingRepository.getOwnerPast(userId);
+                bookings = bookingRepository.getOwnerPast(userId, PageRequest.of(from / size, size));
                 break;
             case "CURRENT":
-                bookings = bookingRepository.getOwnerCurrent(userId);
+                bookings = bookingRepository.getOwnerCurrent(userId, PageRequest.of(from / size, size));
                 break;
             case "FUTURE":
-                bookings = bookingRepository.getOwnerFuture(userId);
+                bookings = bookingRepository.getOwnerFuture(userId, PageRequest.of(from / size, size));
                 break;
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "ALL":
-                bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state));
+                bookings = bookingRepository.getUserItemsBookings(userId, Status.valueOf(state),
+                        PageRequest.of(from / size, size));
                 break;
             default:
                 throw new ValidationException("Unknown state: " + state);
@@ -184,11 +191,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void validateNew(Booking booking) {
-        if (booking.getFrom().isBefore(LocalDateTime.now())) {
+        if (booking.getTo().isBefore(LocalDateTime.now())) {
             throw new ValidationException();
         }
 
-        if (booking.getTo().isBefore(LocalDateTime.now())) {
+        if (booking.getFrom().isBefore(LocalDateTime.now())) {
             throw new ValidationException();
         }
 

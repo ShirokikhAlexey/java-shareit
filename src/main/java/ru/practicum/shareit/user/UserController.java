@@ -17,9 +17,7 @@ public class UserController {
 
     @PostMapping()
     public UserDto create(@RequestBody UserDto user) {
-        UserDto newUser = userService.create(user);
-        log.info("Добавлен новый пользователь {}", newUser.toString());
-        return newUser;
+        return userService.create(user);
     }
 
     @PatchMapping(value = "/{userId}")

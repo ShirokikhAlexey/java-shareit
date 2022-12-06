@@ -1,12 +1,12 @@
 package ru.practicum.shareit.item;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.InvalidItemException;
-import ru.practicum.shareit.exception.InvalidUserException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentMapper;
@@ -14,6 +14,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.requests.ItemRequestRepository;
+import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -34,12 +36,16 @@ public class ItemServiceImpl implements ItemService {
 
     private final CommentRepository commentRepository;
 
+    private final ItemRequestRepository itemRequestRepository;
+
     public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository,
-                           BookingRepository bookingRepository, CommentRepository commentRepository) {
+                           BookingRepository bookingRepository, CommentRepository commentRepository,
+                           ItemRequestRepository itemRequestRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
+        this.itemRequestRepository = itemRequestRepository;
     }
 
     @Override
@@ -49,11 +55,31 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException();
         }
         validate(item);
-        return ItemMapper.toDto(itemRepository.save(ItemMapper.fromDto(user.get(), item)));
+        Item saved = itemRepository.save(ItemMapper.fromDto(user.get(), item));
+        System.out.println(saved);
+        if (item.getRequestId() != null) {
+            addRequestSuggestion(item.getRequestId(), saved);
+        }
+        return ItemMapper.toDto(saved, item.getRequestId());
+    }
+
+    private void addRequestSuggestion(Integer requestId, Item suggestion) {
+        Optional<ItemRequest> request = itemRequestRepository.findById(requestId);
+        if (request.isEmpty()) {
+            throw new NotFoundException();
+        }
+        ItemRequest requestObject = request.get();
+        if (requestObject.getSuggestions() == null) {
+            requestObject.setSuggestions(new ArrayList<>());
+            requestObject.getSuggestions().add(suggestion);
+        } else {
+            requestObject.getSuggestions().add(suggestion);
+        }
+        itemRequestRepository.save(requestObject);
     }
 
     @Override
-    public ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException, InvalidUserException {
+    public ItemDto update(Integer itemId, ItemDto itemDto, Integer userId) throws NotFoundException {
         Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) {
             throw new NotFoundException();
@@ -100,9 +126,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAll(Integer userId) {
+    public List<ItemDto> getAll(Integer userId, Integer from, Integer size) {
         List<ItemDto> result = new ArrayList<>();
-        for (Item item : itemRepository.findByOwner_Id(userId)) {
+        for (Item item : itemRepository.findByOwner_Id(userId, PageRequest.of(from / size, size))) {
             ItemDto itemDto = ItemMapper.toDto(item);
 
             BookingDto latestBooking;
@@ -136,20 +162,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> search(String text) {
+    public List<ItemDto> search(String text, Integer from, Integer size) {
         List<ItemDto> result = new ArrayList<>();
         if (text.isEmpty()) {
             return result;
         }
-        for (Item item : itemRepository.search(text)) {
+        for (Item item : itemRepository.search(text, PageRequest.of(from / size, size))) {
             result.add(ItemMapper.toDto(item));
         }
         return result;
     }
 
     @Override
-    public CommentDto addComment(CommentDto commentDto) throws NotFoundException, InvalidUserException {
-        if (commentDto.getReview().isEmpty()) {
+    public CommentDto addComment(CommentDto commentDto) throws NotFoundException {
+        if (commentDto.getReview().isBlank() || commentDto.getReview() == null) {
             throw new ValidationException();
         }
 
