@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -11,34 +10,31 @@ import java.time.LocalDateTime;
 public class CommentDto {
     private Integer id;
 
-    @JsonProperty("user_id")
-    private Integer userId;
+    private Integer user_id;
 
-    @JsonProperty("item_id")
-    private Integer itemId;
+    private Integer item_id;
 
-    @JsonProperty("text")
-    private String review;
+    private String text;
 
     private String authorName;
     private LocalDateTime created;
 
-    public CommentDto(Integer userId, Integer itemId, String text) {
-        this.userId = userId;
-        this.itemId = itemId;
-        this.review = text;
+    public CommentDto(Integer user_id, Integer item_id, String text) {
+        this.user_id = user_id;
+        this.item_id = item_id;
+        this.text = text;
     }
 
     public CommentDto(String text) {
-        this.review = text;
+        this.text = text;
     }
 
-    public CommentDto(Integer id, Integer userId, Integer itemId,
+    public CommentDto(Integer id, Integer user_id, Integer item_id,
                       String text, String authorName, LocalDateTime created) {
         this.id = id;
-        this.userId = userId;
-        this.itemId = itemId;
-        this.review = text;
+        this.user_id = user_id;
+        this.item_id = item_id;
+        this.text = text;
         this.authorName = authorName;
         this.created = created;
     }

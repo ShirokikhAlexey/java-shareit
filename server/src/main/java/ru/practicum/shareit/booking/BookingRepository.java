@@ -26,14 +26,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query(value = "select b " +
             "from Booking as b " +
-            "where b.to < now() " +
+            "where b.to <= now() " +
             "and b.bookedBy.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getPast(Integer userId, Pageable pageable);
 
     @Query(value = "select b " +
             "from Booking as b " +
-            "where b.from <= now() and b.to >= now() " +
+            "where b.from < now() and b.to > now() " +
             "and b.bookedBy.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getCurrent(Integer userId, Pageable pageable);
@@ -49,7 +49,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
-            "where b.to < now() " +
+            "where b.to <= now() " +
             "and i.owner.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getOwnerPast(Integer userId, Pageable pageable);
@@ -57,7 +57,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
-            "where b.from <= now() and b.to >= now() " +
+            "where b.from < now() and b.to > now() " +
             "and i.owner.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getOwnerCurrent(Integer userId, Pageable pageable);
@@ -73,16 +73,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.item.id = ?1 " +
-            "and b.to <= now() " +
-            "and b.status not in ('WAITING', 'REJECTED', 'CURRENT', 'FUTURE') " +
+            "and (b.to <= now() or (b.from < now() and b.to > now())) " +
             "order by b.to desc ")
     List<Booking> getItemLatestBooking(Integer itemId);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.item.id = ?1 " +
-            "and b.from >= now() " +
-            "and b.status not in ('WAITING', 'REJECTED', 'CURRENT', 'PAST') " +
+            "and b.from > now() " +
             "order by b.from asc ")
     List<Booking> getItemNearestBooking(Integer itemId);
 
