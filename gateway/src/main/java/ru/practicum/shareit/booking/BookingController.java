@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.dto.BookingState;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Controller
 @RequestMapping(path = "/bookings")
@@ -23,9 +24,9 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<Object> getBookings(@RequestHeader("X-Sharer-User-Id") long userId,
                                               @RequestParam(name = "state", defaultValue = "all") String stateParam,
-                                              @Positive @RequestParam(name = "from", defaultValue = "1") Integer from,
+                                              @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                               @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        BookingState state = BookingState.from(stateParam)
+        BookingState state = BookingState.from(stateParam   )
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
         return bookingClient.getBookings(userId, state, from, size);
@@ -48,7 +49,7 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<Object> getUserItemsBookings(@RequestHeader("X-Sharer-User-Id") long userId,
                                                        @RequestParam(name = "state", defaultValue = "all") String stateParam,
-                                                       @Positive @RequestParam(name = "from", defaultValue = "1") Integer from,
+                                                       @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                        @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         BookingState state = BookingState.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));

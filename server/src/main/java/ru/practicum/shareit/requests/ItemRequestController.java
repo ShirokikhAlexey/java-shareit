@@ -35,9 +35,6 @@ public class ItemRequestController {
     public List<ItemRequestDto> search(@RequestHeader("X-Sharer-User-Id") Integer userId,
                                        @RequestParam(defaultValue = "0", required = false) Integer from,
                                        @RequestParam(defaultValue = "10", required = false) Integer size) {
-        if (from < 0 || size < 0) {
-            throw new ValidationException();
-        }
         return itemRequestService.getAll(userId, from, size);
     }
 
