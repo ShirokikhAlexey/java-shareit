@@ -19,21 +19,21 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query(value = "select b " +
             "from Booking as b " +
-            "where b.from > now() " +
+            "where b.from > CURRENT_TIMESTAMP " +
             "and b.bookedBy.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getFuture(Integer userId, Pageable pageable);
 
     @Query(value = "select b " +
             "from Booking as b " +
-            "where b.to <= now() " +
+            "where b.to <= CURRENT_TIMESTAMP " +
             "and b.bookedBy.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getPast(Integer userId, Pageable pageable);
 
     @Query(value = "select b " +
             "from Booking as b " +
-            "where b.from < now() and b.to > now() " +
+            "where b.from < CURRENT_TIMESTAMP and b.to > CURRENT_TIMESTAMP " +
             "and b.bookedBy.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getCurrent(Integer userId, Pageable pageable);
@@ -41,7 +41,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
-            "where b.from > now() " +
+            "where b.from > CURRENT_TIMESTAMP " +
             "and i.owner.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getOwnerFuture(Integer userId, Pageable pageable);
@@ -49,7 +49,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
-            "where b.to <= now() " +
+            "where b.to <= CURRENT_TIMESTAMP " +
             "and i.owner.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getOwnerPast(Integer userId, Pageable pageable);
@@ -57,7 +57,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "join Item as i on i.id = b.item.id " +
-            "where b.from < now() and b.to > now() " +
+            "where b.from < CURRENT_TIMESTAMP and b.to > CURRENT_TIMESTAMP " +
             "and i.owner.id = ?1 " +
             "order by b.from desc ")
     List<Booking> getOwnerCurrent(Integer userId, Pageable pageable);
@@ -73,14 +73,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.item.id = ?1 " +
-            "and (b.to <= now() or (b.from < now() and b.to > now())) " +
+            "and (b.to <= CURRENT_TIMESTAMP or (b.from < CURRENT_TIMESTAMP and b.to > CURRENT_TIMESTAMP)) " +
             "order by b.to desc ")
     List<Booking> getItemLatestBooking(Integer itemId);
 
     @Query(value = "select b " +
             "from Booking as b " +
             "where b.item.id = ?1 " +
-            "and b.from > now() " +
+            "and b.from > CURRENT_TIMESTAMP " +
             "order by b.from asc ")
     List<Booking> getItemNearestBooking(Integer itemId);
 
@@ -89,6 +89,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "where b.item.id  = ?2 " +
             "and b.bookedBy.id = ?1 " +
             "and b.status in ('PAST', 'CURRENT', 'APPROVED') " +
-            "and b.from < now()")
+            "and b.from < CURRENT_TIMESTAMP")
     List<Booking> getUserItemBooking(Integer userId, Integer itemId);
 }
